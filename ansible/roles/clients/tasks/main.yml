@@ -1,0 +1,42 @@
+# e.g.  ansible-playbook -K playbook.yml --extra-vars="format_username=kat num_osds=1"
+
+- name: "copying client files0"
+  shell: cp {{ item }} . ;
+  with_items:
+    - /proj/skyhook-PG0/projscripts/mount-sd*
+    - /proj/skyhook-PG0/projscripts/zap-sd*
+    - /proj/skyhook-PG0/projscripts/format-*
+    - /proj/skyhook-PG0/projscripts/get_nodes.sh
+    - /proj/skyhook-PG0/projscripts/cluster_setup_copy_ssh_keys.sh
+
+- name: "making the node list"
+  shell: bash get_nodes.sh {{ num_osds }} ;
+
+- name: "running ssh setup"
+  shell: sh cluster_setup_copy_ssh_keys.sh ;
+
+- name: "running format sda4"
+  shell: sh format-device.sh {{ format_username }} {{ format_device }} ; 
+  ignore_errors: yes
+
+- name: "clone skyhook repo"
+  shell: |
+    cd /mnt/sda4 ; 
+    git clone https://github.com/uccross/skyhook-ceph.git ; 
+    cd skyhook-ceph ; 
+    git checkout skyhook-transforms ;
+
+- name: "make cluster dir"
+  vars:
+     local_home: "{{ lookup('env','HOME') }}"
+  file:
+    path: "{{ local_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "install ceph-deploy"
+  shell: |
+    sudo apt-get -f install ; 
+    sudo apt-get install -y python-virtualenv ; 
