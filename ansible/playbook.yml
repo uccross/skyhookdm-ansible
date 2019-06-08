@@ -1,10 +1,9 @@
 ---
 - hosts: all
-  become: true
   roles:
     - basic
 
 - hosts: clients
-  become: true
+  strategy: debug
   roles:
     - clients

@@ -1,7 +1,9 @@
-# e.g.  ansible-playbook -K playbook.yml --extra-vars="format_username=kat num_osds=1"
+# e.g.  ansible-playbook -K -b playbook.yml --extra-vars="format_username=kat num_osds=1 format_device=sda4 release_name=luminous so_path=/proj/skyhook-PG0/kat_stuff/libcls_tabular.so.1.0.0 ceph_conf=ceph.conf_osize128_wsize256 osd_device_path=/dev/sdb" -vv
 
 - name: "copying client files0"
-  shell: cp {{ item }} . ;
+  vars:
+     local_home: "{{ lookup('env','HOME') }}"
+  shell: cp {{ item }} "{{ local_home }}" ;
   with_items:
     - /proj/skyhook-PG0/projscripts/mount-sd*
     - /proj/skyhook-PG0/projscripts/zap-sd*
@@ -30,13 +32,81 @@
   vars:
      local_home: "{{ lookup('env','HOME') }}"
   file:
-    path: "{{ local_home }}"
+    path: "{{ local_home }}/cluster"
     state: directory
     owner: root
     group: root
-    mode: 0644
+    mode: 0755
 
 - name: "install ceph-deploy"
+  vars:
+     local_home: "{{ lookup('env','HOME') }}"
   shell: |
-    sudo apt-get -f install ; 
-    sudo apt-get install -y python-virtualenv ; 
+    apt-get -f install ; 
+    apt-get install -y python-virtualenv ; 
+    cd "{{ local_home }}/cluster" ;
+    virtualenv env ;
+    env/bin/pip install ceph-deploy==1.5.38 ;
+
+- name: "installing release on all hosts"
+  shell: |
+    env/bin/ceph-deploy install --release={{ release_name }} {{ item }} ;
+  with_inventory_hostnames:
+    - all
+
+- name: "installing tabular so lib"
+  shell: |
+    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+    sudo cp {{ so_path }} . ;
+    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
+    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
+  ignore_errors: yes
+
+- name: "spinning up a new cluster"
+  shell: |
+    cd "{{ local_home }}/cluster" ;
+    env/bin/ceph-deploy new client0 ;
+  ignore_errors: yes
+
+- name: "overwriting ceph.conf part0"
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+  copy: src="../../../ceph_conf/{{ ceph_conf }}"
+        dest="{{ local_home }}/cluster"
+        owner=root
+        group=root
+        mode=0644
+
+- name: "overwriting ceph.conf part1"
+  vars:
+     local_home: "{{ lookup('env','HOME') }}"
+  shell: |
+    cd "{{ local_home }}/cluster" ;
+    mv {{ ceph_conf }} ceph.conf ;
+
+- name: "spinning up a new monitor"
+  vars:
+     local_home: "{{ lookup('env','HOME') }}"
+  shell: |
+    cd "{{ local_home }}/cluster" ;
+    #env/bin/ceph-deploy mon create client0 ;
+    #env/bin/ceph-deploy gatherkeys client0 ;
+
+#- name: "zap+create disks"
+#  vars:
+#     local_home: "{{ lookup('env','HOME') }}"
+#  shell: |
+#    cd "{{ local_home }}/cluster" ;
+#    env/bin/ceph-deploy osd create {{ item }}:{{ osd_device_path }} ;
+#  with_items:
+#    - all
+#
+#- name: "spin up admin"
+#  vars:
+#     local_home: "{{ lookup('env','HOME') }}"
+#  shell: |
+#    cd "{{ local_home }}/cluster" ;
+#    env/bin/ceph-deploy admin client0 ;
+#    sudo chmod a+r /etc/ceph/ceph.client.admin.keyring ;
+#  with_items:
+#    - all
