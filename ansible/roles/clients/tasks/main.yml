@@ -91,15 +91,15 @@
     env/bin/ceph-deploy gatherkeys client0 ;
     sudo chmod 766 *.keyring ;
 
-#- name: "zap+create disks"
-#  vars:
-#     local_home: "{{ lookup('env','HOME') }}"
-#  shell: |
-#    cd "{{ local_home }}/cluster" ;
-#    env/bin/ceph-deploy osd create {{ item }}:{{ osd_device_path }} ;
-#    sudo chmod 766 *.keyring ;
-#  with_inventory_hostnames:
-#    - osds
+- name: "zap+create disks"
+  vars:
+     local_home: "{{ lookup('env','HOME') }}"
+  shell: |
+    cd "{{ local_home }}/cluster" ;
+    env/bin/ceph-deploy osd create {{ item }}:{{ osd_device_path }} ;
+    sudo chmod 766 *.keyring ;
+  with_inventory_hostnames:
+    - osds
 
 - name: "spin up admin"
   shell: |
