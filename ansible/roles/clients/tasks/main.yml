@@ -50,14 +50,6 @@
   with_inventory_hostnames:
     - all
 
-- name: "installing tabular so lib"
-  shell: |
-    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-    sudo cp {{ so_path }} . ;
-    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
-    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
-  ignore_errors: yes
-
 - name: "spinning up a new cluster"
   shell: |
     cd "{{ local_home }}/cluster" ;
@@ -101,31 +93,59 @@
   with_inventory_hostnames:
     - osds
 
-- name: "setup skyhook repo"
+- name: "spin up admin"
   shell: |
-    cd /mnt/sda4/skyhook-ceph ;
-    git checkout {{ skyhook_branch | default( 'skyhook-luminous' ) }} ;
+    cd "{{ local_home }}/cluster" ;
+    env/bin/ceph-deploy admin client0 ;
+    sudo chmod a+r /etc/ceph/ceph.client.admin.keyring ;
+    sudo chmod 766 *.keyring ;
 
-- name: "running install-deps"
+- name: "push configs to osds"
   shell: |
-    cd /mnt/sda4/skyhook-ceph ;
-    ./install-deps.sh ;
+    cd "{{ local_home }}/cluster" ;
+    env/bin/ceph-deploy config push osd0 ;
+    sudo chmod 766 *.keyring ;
 
-- name: "running do_cmake"
+- name: "spin up mgr"
   shell: |
-    cd /mnt/sda4/skyhook-ceph ;
-    ./do_cmake.sh ;
+    cd "{{ local_home }}/cluster" ;
+    env/bin/ceph-deploy mgr create client0 ;
+    sudo chmod 766 *.keyring ;
 
-- name: "make run-query"
+- name: "check install with testpool and test objects"
   shell: |
-    cd /mnt/sda4/skyhook-ceph/build ;
-    make run-query ;
+    ceph osd pool create testpool 64 64 replicated ; #or rados mkpool testpool
+    ceph osd pool set testpool size 1 ; #need to set the size
+    ceph osd pool application enable testpool mytest ;
+    rados -p testpool put testobj0 /proj/skyhook-PG0/kat_stuff/dataset_obj_v_file_100mb.txt ;
+    rados -p testpool put testobj1 /proj/skyhook-PG0/kat_stuff/dataset_obj_v_file_100mb.txt ;
+    rados -p testpool put testobj2 /proj/skyhook-PG0/kat_stuff/dataset_obj_v_file_100mb.txt ;
 
-- name: "test run-query"
-  shell: |
-    cd /mnt/sda4/skyhook-ceph/build ;
-    rados mkpool tpchflatbuf ;
-    ceph osd pool set tpchflatbuf size 1 ;
-    cp /proj/skyhook-PG0/kat_stuff/skyhookdb.testdb.lineitem.oid* . ;
-    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf  skyhookdb.testdb.lineitem.oid.* ;
-    bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
+#- name: "setup skyhook repo"
+#  shell: |
+#    cd /mnt/sda4/skyhook-ceph ;
+#    git checkout {{ skyhook_branch | default( 'skyhook-luminous' ) }} ;
+#
+#- name: "running install-deps"
+#  shell: |
+#    cd /mnt/sda4/skyhook-ceph ;
+#    ./install-deps.sh ;
+#
+#- name: "running do_cmake"
+#  shell: |
+#    cd /mnt/sda4/skyhook-ceph ;
+#    ./do_cmake.sh ;
+#
+#- name: "make run-query"
+#  shell: |
+#    cd /mnt/sda4/skyhook-ceph/build ;
+#    make run-query ;
+#
+#- name: "test run-query"
+#  shell: |
+#    cd /mnt/sda4/skyhook-ceph/build ;
+#    rados mkpool tpchflatbuf ;
+#    ceph osd pool set tpchflatbuf size 1 ;
+#    cp /proj/skyhook-PG0/kat_stuff/skyhookdb.testdb.lineitem.oid* . ;
+#    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf  skyhookdb.testdb.lineitem.oid.* ;
+#    bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
