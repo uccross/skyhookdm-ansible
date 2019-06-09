@@ -4,4 +4,4 @@
     sudo cp {{ so_path }} . ;
     sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
     sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
-ignore_errors: yes
+    ignore_errors: yes
