@@ -8,3 +8,7 @@
     local_home: "{{ lookup('env','HOME') }}"
   roles:
     - clients
+
+- hosts: all
+  roles:
+    - final
