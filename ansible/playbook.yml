@@ -4,6 +4,7 @@
     - basic
 
 - hosts: clients
-  strategy: debug
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
   roles:
     - clients
