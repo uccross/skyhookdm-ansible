@@ -18,7 +18,7 @@
     - name: "setup skyhook repo"
       shell: |
         cd /mnt/sda4/skyhook-ceph ;
-        git checkout {{ skyhook_branch | default( 'skyhook-luminous' ) }} ;
+        git checkout {{ skyhook_branch }} ;
 
     - name: "running install-deps"
       shell: |
@@ -43,3 +43,13 @@
         cp /proj/skyhook-PG0/kat_stuff/skyhookdb.testdb.lineitem.oid* . ;
         yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf  skyhookdb.testdb.lineitem.oid.* ;
         bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
+
+    - name: "test paper_exps"
+      shell: |
+        cd /mnt/sda4/skyhook-ceph/build ;
+        rados mkpool paper_exps ;
+        ceph osd pool set paper_exps size 1 ;
+        bin/run-papertests ../src/progly/paper0/dataset_case1_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 0 test0 ;
+        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 1 test1 ;
+        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 2 test2 ;
+        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 3 test3 ;
