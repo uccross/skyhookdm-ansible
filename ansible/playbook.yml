@@ -44,6 +44,11 @@
         yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf  skyhookdb.testdb.lineitem.oid.* ;
         bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
 
+    - name: "make run-papertests"
+      shell: |
+        cd /mnt/sda4/skyhook-ceph/build ;
+        make run-papertests ;
+
     - name: "test paper_exps"
       shell: |
         cd /mnt/sda4/skyhook-ceph/build ;
