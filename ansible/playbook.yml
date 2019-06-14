@@ -49,12 +49,12 @@
         cd /mnt/sda4/skyhook-ceph/build ;
         make run-papertests ;
 
-    - name: "test paper_exps"
-      shell: |
-        cd /mnt/sda4/skyhook-ceph/build ;
-        rados mkpool paper_exps ;
-        ceph osd pool set paper_exps size 1 ;
-        bin/run-papertests ../src/progly/paper0/dataset_case1_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 0 test0 ;
-        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 1 test1 ;
-        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 2 test2 ;
-        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 3 test3 ;
+#    - name: "test paper_exps"
+#      shell: |
+#        cd /mnt/sda4/skyhook-ceph/build ;
+#        rados mkpool paper_exps ;
+#        ceph osd pool set paper_exps size 1 ;
+#        bin/run-papertests ../src/progly/paper0/dataset_case1_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 0 test0 ;
+#        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 1 test1 ;
+#        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 2 test2 ;
+#        bin/run-papertests ../src/progly/paper0/dataset_newline_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 3 test3 ;
