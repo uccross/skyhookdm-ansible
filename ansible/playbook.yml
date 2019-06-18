@@ -6,6 +6,8 @@
 - hosts: clients
   vars:
     local_home: "{{ lookup('env','HOME') }}"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   roles:
     - clients
 
