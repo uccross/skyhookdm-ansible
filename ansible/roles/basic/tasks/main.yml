@@ -1,6 +1,7 @@
 - name: "set non-interactive"
   shell: |
-    export DEBIAN_FRONTEND=noninteractive ;
+    echo "DEBIAN_FRONTEND=noninteractive" >> "{{ local_home }}/.profile" ;
+    source "{{ local_home }}/.profile" ;
 
 - name: "installing software"
   apt: pkg={{ item }} state=installed
