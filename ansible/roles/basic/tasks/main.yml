@@ -3,11 +3,6 @@
   with_items:
     - vim
     - tmux
-    
-- name: "changing hostnames"
-  shell: |
-    sudo hostname {{ ansible_host }}
-    HOSTNAME={{ ansible_host }}
 
 - name: "adding keyfile"
   shell: |
