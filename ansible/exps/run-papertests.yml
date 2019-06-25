@@ -1,0 +1,17 @@
+---
+- import_playbook: ../setup_playbook.yml
+
+- hosts: clients
+  vars_files:
+    - ./params/raw_1mb.yml
+  vars:
+    curr_datetime: "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+  tasks:
+    - name: "test paper_exps"
+      shell: |
+        cd /mnt/sda4/skyhook-ceph/build ;
+        rados mkpool {{ pool_name }} ;
+        ceph osd pool set {{ pool_name }} size 1 ;
+        bin/run-papertests {{ data_path }} {{ res_path }}/res_{{ curr_datetime }}.txt {{ pool_name }} {{ test_type }} {{ obj_name }} ;
+      tags:
+        - exp_only
