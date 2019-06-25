@@ -6,6 +6,8 @@
     - basic
 
 - hosts: clients
+  vars_files:
+    - ./vars/extra_vars.yml
   vars:
     local_home: "{{ lookup('env','HOME') }}"
   environment:
@@ -14,6 +16,8 @@
     - clients
 
 - hosts: all
+  vars_files:
+    - ./vars/extra_vars.yml
   roles:
     - final
 
