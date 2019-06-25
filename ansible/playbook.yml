@@ -1,15 +1,13 @@
 ---
 - hosts: all
-  vars:
-    local_home: "{{ cloudlab_home }}"
+  vars_files:
+    - ./vars/extra_vars.yml
   roles:
     - basic
 
 - hosts: clients
   vars_files:
     - ./vars/extra_vars.yml
-  vars:
-    local_home: "{{ cloudlab_home }}"
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
