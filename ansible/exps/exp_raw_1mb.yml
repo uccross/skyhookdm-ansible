@@ -1,0 +1,10 @@
+---
+- import_playbook: ../setup_playbook.yml
+
+- hosts: clients
+  - name: "test paper_exps"
+    shell: |
+      cd /mnt/sda4/skyhook-ceph/build ;
+      rados mkpool paper_exps ;
+      ceph osd pool set paper_exps size 1 ;
+      bin/run-papertests ../src/progly/paper0/dataset_case1_1mb.txt ../src/progly/paper0/res_test.txt paper_exps 0 test0 ;
