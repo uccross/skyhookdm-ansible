@@ -22,6 +22,8 @@
     - final
 
 - hosts: clients
+  vars_files:
+    - ./vars/extra_vars.yml
   tasks:
     - name: "setup skyhook repo"
       shell: |
