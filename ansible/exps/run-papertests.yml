@@ -2,10 +2,10 @@
 - import_playbook: ../setup_playbook.yml
 
 - hosts: clients
-  vars_files:
-    - "{{ params_file }}"
   vars:
     curr_datetime: "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+  vars_files:
+    - "params/{{ data_file }}"
   tasks:
     - name: "test paper_exps"
       shell: |
