@@ -3,6 +3,9 @@
   with_items:
     - vim
     - tmux
+    - screen
+    - tkdiff
+    - dstat
 
 - name: "adding keyfile"
   shell: |
