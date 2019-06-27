@@ -4,23 +4,19 @@
     - ./vars/extra_vars.yml
   roles:
     - basic
-  tags:
-    - basicinstalls
 
 - hosts: clients
   tasks:
     - name: "install postgres on client0"
       become: yes
       shell: |
-        sudo useradd postgres ;
-        echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" >  /etc/apt/sources.list.d/pgdg.list ;
-        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - ;
-        sudo apt-get update ;
-        yes | apt-get install postgresql-10 ;
-        yes | apt-get install postgresql-server-dev-10 ;
-        yes | apt-get install postgresql-contrib ;
-  tags:
-    - postgresinstall
+        sudo su -c "useradd postgres" ;
+        sudo su -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" >  /etc/apt/sources.list.d/pgdg.list' ;
+        sudo su -c "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -" ;
+        sudo su -c "sudo apt-get update" ;
+        sudo su -c "yes | apt-get install postgresql-10" ;
+        sudo su -c "yes | apt-get install postgresql-server-dev-10" ;
+        sudo su -c "yes | apt-get install postgresql-contrib" ;
 
 - hosts: clients
   vars_files:
