@@ -1,6 +1,6 @@
 - name: "copy over so files"
   copy:
-    src: ../../../lib/*
+    src: ../../../lib/libcls_tabular.so.1.0.0
     dest: "{{ local_home }}"
     mode: '0644'
 

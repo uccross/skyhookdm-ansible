@@ -68,7 +68,15 @@
 
     - name: "copy expected results files"
       copy:
-        src: ./exps/res/*.txt
+        src: ./exps/res/res_select_all.txt
+        dest: "{{ local_home }}"
+        mode: '0644'
+      copy:
+        src: ./exps/res/res_project_cols.txt
+        dest: "{{ local_home }}"
+        mode: '0644'
+      copy:
+        src: ./exps/res/res_like.txt
         dest: "{{ local_home }}"
         mode: '0644'
 
