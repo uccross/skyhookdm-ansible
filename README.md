@@ -1,3 +1,4 @@
 # skyhook-ansible
-ansible scripts for setting up skyhook
-test change.
+
+## Running on CloudLab
+See https://github.com/uccross/skyhook-ceph/wiki/Installing-with-Skyhook-Ansible
