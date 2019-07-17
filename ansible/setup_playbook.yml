@@ -61,10 +61,16 @@
         cd /mnt/sda4/skyhook-ceph/build ;
         rados mkpool tpchflatbuf ;
         ceph osd pool set tpchflatbuf size 1 ;
-        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.test2objs.flatbufv2.lineitem.0 ;
-        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.test2objs.flatbufv2.lineitem.1 ;
-        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf skyhook.test2objs.flatbufv2.lineitem.* ;
+        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.0 ;
+        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.1 ;
+        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.* ;
         #bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
+
+    - name: "copy expected results files"
+      copy:
+        src: ./exps/res/*
+        dest: {{ local_home }}
+        mode: '0644'
 
 #    - name: "make run-papertests"
 #      shell: |

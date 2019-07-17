@@ -1,3 +1,9 @@
+- name: "copy over so files"
+  copy:
+    src: ./exps/res/*
+    dest: {{ local_home }}
+    mode: '0644'
+
 - name: "installing tabular so lib"
   shell: |
     cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;

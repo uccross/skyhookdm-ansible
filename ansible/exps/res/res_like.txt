@@ -1,0 +1,4 @@
+ORDERKEY(key)(NOT NULL)|LINENUMBER(key)(NOT NULL)|TAX|COMMENT|RETURNFLAG
+5|1|0.04|ts wake furiously |R
+5|2|0.08|sts use slyly quickly special instruc|R
+6|1|0.03|p furiously special foxes|A
