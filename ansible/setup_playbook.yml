@@ -61,14 +61,15 @@
         cd /mnt/sda4/skyhook-ceph/build ;
         rados mkpool tpchflatbuf ;
         ceph osd pool set tpchflatbuf size 1 ;
-        cp /proj/skyhook-PG0/kat_stuff/skyhookdb.testdb.lineitem.oid* . ;
-        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf  skyhookdb.testdb.lineitem.oid.* ;
-        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
+        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.test2objs.flatbufv2.lineitem.0 ;
+        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.test2objs.flatbufv2.lineitem.1 ;
+        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf skyhook.test2objs.flatbufv2.lineitem.* ;
+        #bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
 
-    - name: "make run-papertests"
-      shell: |
-        cd /mnt/sda4/skyhook-ceph/build ;
-        make run-papertests ;
+#    - name: "make run-papertests"
+#      shell: |
+#        cd /mnt/sda4/skyhook-ceph/build ;
+#        make run-papertests ;
 
 #    - name: "test paper_exps"
 #      shell: |
