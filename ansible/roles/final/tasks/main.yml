@@ -1,7 +1,7 @@
 - name: "copy over so files"
   copy:
-    src: ./exps/res/*
-    dest: {{ local_home }}
+    src: ../../../lib/*
+    dest: "{{ local_home }"
     mode: '0644'
 
 - name: "installing tabular so lib"

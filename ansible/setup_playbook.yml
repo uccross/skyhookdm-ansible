@@ -68,8 +68,8 @@
 
     - name: "copy expected results files"
       copy:
-        src: ./exps/res/*
-        dest: {{ local_home }}
+        src: ./exps/res/*.txt
+        dest: "{{ local_home }}"
         mode: '0644'
 
 #    - name: "make run-papertests"
