@@ -2,7 +2,7 @@
   copy:
     src: ../../../lib/libcls_tabular.so.1.0.0
     dest: "{{ local_home }}"
-    mode: '0644'
+    mode: '0777'
 
 - name: "installing tabular so lib"
   shell: |
