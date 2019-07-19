@@ -41,6 +41,11 @@
         cd /mnt/sda4/skyhook-ceph ;
         git checkout {{ skyhook_branch }} ;
 
+    - name: "checkout specific commit if needed."
+        git checkout {{ commit_id }} ;
+        when:
+          - "{{ commit_id }}" != "latest"
+
     - name: "running install-deps"
       shell: |
         cd /mnt/sda4/skyhook-ceph ;
