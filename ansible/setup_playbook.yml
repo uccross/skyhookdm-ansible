@@ -69,7 +69,15 @@
         wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.0 ;
         wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.1 ;
         yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.* ;
-        #bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls ;
+
+        # Q1:
+        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "*" --use-cls > "{{ local_home }}/res_select_all.out" ;
+
+        # Q2:
+        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls > "{{ local_home }}/res_project_cols.out" ;
+
+        # Q3:
+        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select-preds "orderkey,geq,5;tax,sum,0;" --table-name "lineitem" --use-cls  > "{{ local_home }}/res_sum.out" ;
 
     - name: "copy expected results files"
       copy:
@@ -81,8 +89,17 @@
         dest: "{{ local_home }}"
         mode: '0644'
       copy:
-        src: ./exps/res/res_like.txt
+        src: ./exps/res/res_sum.txt
+        dest: "{{ local_home }}"
+        mode: '0644'
+      copy:
+        src: ./exps/res/validate.py
         dest: "{{ local_home }}"
         mode: '0644'
 
 #  - name "self-validate"
+#      shell: |
+#        cd "{{ local_home }}" ;
+#        python validate.py res_select_all.out res_select_all.txt ;
+#        python validate.py res_project_cols.out res_project_cols.txt ;
+#        python validate.py res_sum.out res_sum.txt ;

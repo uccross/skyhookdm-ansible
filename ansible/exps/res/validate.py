@@ -26,13 +26,10 @@ def compare_res( out_filename, res_filename ) :
   do_compare( res_filename, out_filename )
 
 def main( line_args ) :
-  out_select_all   = line_args[1]
-  out_project_cols = line_args[2]
-  out_like         = line_args[3]
+  out_filename = line_args[1]
+  expected_res_filename = line_args[2]
 
-  compare_res( out_select_all, "res_select_all.txt" )
-  #compare_res( out_project_cols )
-  #compare_res( out_like )
+  compare_res( out_filename, expected_res_filename )
 
 if __name__ == "__main__" :
   main( sys.argv )
