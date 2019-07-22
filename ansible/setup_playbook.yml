@@ -26,6 +26,14 @@
   roles:
     - clients
 
+- hosts: osds
+  vars_files:
+    - ./vars/extra_vars.yml
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  roles:
+    - osds
+
 - hosts: all
   vars_files:
     - ./vars/extra_vars.yml
