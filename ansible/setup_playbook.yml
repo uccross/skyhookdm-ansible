@@ -48,7 +48,7 @@
   tasks:
     - name: "test run-query"
       shell: |
-        cd /mnt/sda4/skyhook-ceph/build ;
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         rados mkpool tpchflatbuf ;
         ceph osd pool set tpchflatbuf size 1 ;
         wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.0 ;
