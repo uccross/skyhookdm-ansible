@@ -12,3 +12,10 @@
 #    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
 #    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
 #  ignore_errors: yes
+
+- name: "installing tabular so lib"
+  shell: |
+    sudo cp /mnt/sda4/skyhook-ceph/build/lib/libcls_tabular.so.1.0.0  /usr/lib/x86_64-linux-gnu/rados-classes/ ; # TODO eliminate sda4 references
+    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
+    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;

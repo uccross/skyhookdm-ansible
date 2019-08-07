@@ -36,11 +36,11 @@
 #  roles:
 #    - osds
 
-#- hosts: all
-#  vars_files:
-#    - ./vars/extra_vars.yml
-#  roles:
-#    - final
+- hosts: all
+  vars_files:
+    - ./vars/extra_vars.yml
+  roles:
+    - final
 
 - hosts: clients
   vars_files:
