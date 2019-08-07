@@ -2,30 +2,32 @@
 - hosts: all
   vars_files:
     - ./vars/extra_vars.yml
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   roles:
     - basic
 
-#- hosts: clients
-#  tasks:
-#    - name: "install postgres on client0"
-#      become: yes
-#      shell: |
-#        sudo su -c "useradd postgres" ;
-#        sudo su -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" >  /etc/apt/sources.list.d/pgdg.list' ;
-#        sudo su -c "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -" ;
-#        sudo su -c "sudo apt-get update" ;
-#        sudo su -c "yes | apt-get install postgresql-10" ;
-#        sudo su -c "yes | apt-get install postgresql-server-dev-10" ;
-#        sudo su -c "yes | apt-get install postgresql-contrib" ;
+- hosts: clients
+  tasks:
+    - name: "install postgres on client0"
+      become: yes
+      shell: |
+        sudo su -c "useradd postgres" ;
+        sudo su -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" >  /etc/apt/sources.list.d/pgdg.list' ;
+        sudo su -c "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -" ;
+        sudo su -c "sudo apt-get update" ;
+        sudo su -c "yes | apt-get install postgresql-10" ;
+        sudo su -c "yes | apt-get install postgresql-server-dev-10" ;
+        sudo su -c "yes | apt-get install postgresql-contrib" ;
 
-#- hosts: clients
-#  vars_files:
-#    - ./vars/extra_vars.yml
-#  environment:
-#    DEBIAN_FRONTEND: noninteractive
-#  roles:
-#    - clients
-#
+- hosts: clients
+  vars_files:
+    - ./vars/extra_vars.yml
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  roles:
+    - clients
+
 #- hosts: osds
 #  vars_files:
 #    - ./vars/extra_vars.yml
@@ -33,81 +35,56 @@
 #    DEBIAN_FRONTEND: noninteractive
 #  roles:
 #    - osds
-#
+
 #- hosts: all
 #  vars_files:
 #    - ./vars/extra_vars.yml
 #  roles:
 #    - final
+
+- hosts: clients
+  vars_files:
+    - ./vars/extra_vars.yml
+  tasks:
+    - name: "test run-query"
+      shell: |
+        cd /mnt/sda4/skyhook-ceph/build ;
+        rados mkpool tpchflatbuf ;
+        ceph osd pool set tpchflatbuf size 1 ;
+        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.0 ;
+        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.1 ;
+        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.* ;
+
+#        # Q1:
+#        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "*" --use-cls > "{{ local_home }}/res_select_all.out" ;
 #
-#- hosts: clients
-#  vars_files:
-#    - ./vars/extra_vars.yml
-#  tasks:
-#    - name: "setup skyhook repo"
+#        # Q2:
+#        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls > "{{ local_home }}/res_project_cols.out" ;
+#
+#        # Q3:
+#        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select-preds "orderkey,geq,5;tax,sum,0;" --table-name "lineitem" --use-cls  > "{{ local_home }}/res_sum.out" ;
+#
+#    - name: "copy expected results files"
+#      copy:
+#        src: ./exps/res/res_select_all.txt
+#        dest: "{{ local_home }}"
+#        mode: '0644'
+#      copy:
+#        src: ./exps/res/res_project_cols.txt
+#        dest: "{{ local_home }}"
+#        mode: '0644'
+#      copy:
+#        src: ./exps/res/res_sum.txt
+#        dest: "{{ local_home }}"
+#        mode: '0644'
+#      copy:
+#        src: ./exps/res/validate.py
+#        dest: "{{ local_home }}"
+#        mode: '0644'
+
+#  - name "self-validate"
 #      shell: |
-#        cd /mnt/sda4/skyhook-ceph ;
-#        git checkout {{ skyhook_branch }} ;
-#
-##    - name: "checkout specific commit if needed."
-##        git checkout {{ commit_id }} ;
-##        when:
-##          - "{{ commit_id }}" != "latest"
-#
-##    - name: "running install-deps"
-##      shell: |
-##        cd /mnt/sda4/skyhook-ceph ;
-##        ./install-deps.sh ;
-##    
-##    - name: "running do_cmake"
-##      shell: |
-##        cd /mnt/sda4/skyhook-ceph ;
-##        ./do_cmake.sh ;
-#    
-#    - name: "make run-query"
-#      shell: |
-#        cd /mnt/sda4/skyhook-ceph/build ;
-#        make run-query ;
-#    
-#    - name: "test run-query"
-#      shell: |
-#        cd /mnt/sda4/skyhook-ceph/build ;
-#        rados mkpool tpchflatbuf ;
-#        ceph osd pool set tpchflatbuf size 1 ;
-#        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.0 ;
-#        wget https://users.soe.ucsc.edu/~jlefevre/skyhookdb/testdata/skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.1 ;
-#        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh tpchflatbuf skyhook.SFT_FLATBUF_FLEX_ROW.lineitem.* ;
-#
-##        # Q1:
-##        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "*" --use-cls > "{{ local_home }}/res_select_all.out" ;
-##
-##        # Q2:
-##        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select "orderkey,lt,5;linenumber,gt,5;tax,leq,1.01;"  --project-cols orderkey,linenumber,tax,comment --use-cls > "{{ local_home }}/res_project_cols.out" ;
-##
-##        # Q3:
-##        bin/run-query --num-objs 2 --pool tpchflatbuf --wthreads 1 --qdepth 10 --query flatbuf --select-preds "orderkey,geq,5;tax,sum,0;" --table-name "lineitem" --use-cls  > "{{ local_home }}/res_sum.out" ;
-##
-##    - name: "copy expected results files"
-##      copy:
-##        src: ./exps/res/res_select_all.txt
-##        dest: "{{ local_home }}"
-##        mode: '0644'
-##      copy:
-##        src: ./exps/res/res_project_cols.txt
-##        dest: "{{ local_home }}"
-##        mode: '0644'
-##      copy:
-##        src: ./exps/res/res_sum.txt
-##        dest: "{{ local_home }}"
-##        mode: '0644'
-##      copy:
-##        src: ./exps/res/validate.py
-##        dest: "{{ local_home }}"
-##        mode: '0644'
-#
-##  - name "self-validate"
-##      shell: |
-##        cd "{{ local_home }}" ;
-##        python validate.py res_select_all.out res_select_all.txt ;
-##        python validate.py res_project_cols.out res_project_cols.txt ;
-##        python validate.py res_sum.out res_sum.txt ;
+#        cd "{{ local_home }}" ;
+#        python validate.py res_select_all.out res_select_all.txt ;
+#        python validate.py res_project_cols.out res_project_cols.txt ;
+#        python validate.py res_sum.out res_sum.txt ;

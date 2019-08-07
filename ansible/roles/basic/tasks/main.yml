@@ -47,13 +47,7 @@
 - name: "make run-query"
   shell: |
     cd /mnt/sda4/skyhook-ceph/build ;
-    make run-query ;
-
-- name: "copy over so files"
-  copy:
-    src: ../../../lib/libcls_tabular.so.1.0.0
-    dest: "{{ local_home }}"
-    mode: '0777'
+    make cls_tabular ;
 
 - name: "installing tabular so lib"
   shell: |
