@@ -11,3 +11,54 @@
   shell: |
     cp /proj/skyhook-PG0/kat_stuff/id_rsa "{{ local_home }}/.ssh"
     sudo chmod 0600 "{{ local_home }}/.ssh/id_rsa"
+
+- name: "copy setup files"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ local_home }}"
+    mode: '0644'
+  with_items:
+    - ./files/format-device.sh
+
+- name: "running format sda4"
+  shell: sh format-device.sh {{ format_username }} {{ format_device }} ;
+  ignore_errors: yes
+
+- name: "clone skyhook repo"
+  shell: |
+    cd /mnt/sda4 ;
+    git clone https://github.com/uccross/skyhook-ceph.git ;
+
+- name: "setup skyhook repo"
+  shell: |
+    cd /mnt/sda4/skyhook-ceph ;
+    git checkout {{ skyhook_branch }} ;
+
+- name: "running install-deps"
+  shell: |
+    cd /mnt/sda4/skyhook-ceph ;
+    ./install-deps.sh ;
+
+- name: "running do_cmake"
+  shell: |
+    cd /mnt/sda4/skyhook-ceph ;
+    ./do_cmake.sh ;
+
+- name: "make run-query"
+  shell: |
+    cd /mnt/sda4/skyhook-ceph/build ;
+    make run-query ;
+
+- name: "copy over so files"
+  copy:
+    src: ../../../lib/libcls_tabular.so.1.0.0
+    dest: "{{ local_home }}"
+    mode: '0777'
+
+- name: "installing tabular so lib"
+  shell: |
+    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+    sudo cp /mnt/sda4/skyhook-ceph/build/libcls_tabular.so.1.0.0 . ; # TODO eliminate sda4 references
+    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
+    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
+  ignore_errors: yes

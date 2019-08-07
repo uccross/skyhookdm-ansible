@@ -6,7 +6,7 @@
   with_items:
     - ./files/get_nodes.sh
     - ./files/cluster_setup_copy_ssh_keys.sh
-    - ./files/format-device.sh
+#    - ./files/format-device.sh
 
 - name: "making the node list"
   shell: bash get_nodes.sh {{ num_osds }} ;
@@ -14,9 +14,9 @@
 - name: "running ssh setup"
   shell: sh cluster_setup_copy_ssh_keys.sh ;
 
-- name: "running format sda4"
-  shell: sh format-device.sh {{ format_username }} {{ format_device }} ; 
-  ignore_errors: yes
+#- name: "running format sda4"
+#  shell: sh format-device.sh {{ format_username }} {{ format_device }} ; 
+#  ignore_errors: yes
 
 - name: "make cluster dir"
   file:
