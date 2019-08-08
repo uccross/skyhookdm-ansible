@@ -1,19 +1,27 @@
----
 # e.g. ansible-playbook -K -b exps/run-papertests.yml -vvvv --extra-vars "data_file=params/raw_1mb.yml" ;
 
-# always setup ceph first.
-- import_playbook: ../setup_playbook.yml
+---
+- hosts: localhost
+  tasks:
+    - debug:
+        msg: play1
 
-# then run the experiment from the client skyhook-ceph repo
+- name: run setup_playbook to setup ceph cluster
+  import_playbook: ../setup_playbook.yml
+
 - hosts: clients
   vars:
     curr_datetime: "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
   vars_files:
     - "{{ data_file }}"
   tasks:
-    - name: "test paper_exps"
+    - debug:
+        msg: play2
+    - name: test paper_exps
+      debug:
+        msg: "blah"
+    - name: test paper_exps
       shell: |
-
         # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
 
@@ -26,7 +34,3 @@
 
         # run the test
         bin/run-papertests {{ data_path }} {{ res_path }}/res_{{ curr_datetime }}.txt {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} ;
-
-#    - name: "self-validation"
-#        shell: |
-#          echo "self-validate here!!!" ;
