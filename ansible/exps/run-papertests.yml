@@ -1,6 +1,10 @@
 ---
+# e.g. ansible-playbook -K -b exps/run-papertests.yml -vvvv --extra-vars "data_file=params/raw_1mb.yml" ;
+
+# always setup ceph first.
 - import_playbook: ../setup_playbook.yml
 
+# then run the experiment from the client skyhook-ceph repo
 - hosts: clients
   vars:
     curr_datetime: "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
@@ -9,9 +13,8 @@
   tasks:
     - name: "test paper_exps"
       shell: |
-        cd /mnt/sda4/skyhook-ceph/build ;
+        cd "/mnt/{{ format_devie }}/skyhook-ceph/build" ;
+        make -j12 run-papertests ;
         rados mkpool {{ pool_name }} ;
         ceph osd pool set {{ pool_name }} size 1 ;
         bin/run-papertests {{ data_path }} {{ res_path }}/res_{{ curr_datetime }}.txt {{ pool_name }} {{ test_type }} {{ obj_name }} ;
-      tags:
-        - exp_only

@@ -1,6 +1,29 @@
 ---
+# description: 
+#   - unstructured writes. 
+#   - uses contenated sequential encoding.
+#   - input data is one column of integers with a uniform 
+#     fixed number of digits.
+#   - 1mb input size.
+#   - writes results to shared dir.
+
+
+# device on client0 where skyhook-ceph repo was cloned (sda4 for c220g5)
+format_device: sda4
+
+# path to input data
 data_path: /proj/skyhook-PG0/kat_stuff/data/dataset_case1_1mb.txt
+
+# path to output results dir
 res_path: /proj/skyhook-PG0/kat_stuff/res/
+
+# name of pool to use for experiment
 pool_name: paper_exps
+
+# test_type is a variable in run-papertests.
+#   0 := encode and write the ints as one long contatenated sequence
+#   1 := encode and write each int individually
 test_type: 0
+
+# the identifier string for the object storing the data for this test run
 obj_name: test0
