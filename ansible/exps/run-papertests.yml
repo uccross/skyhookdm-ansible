@@ -1,4 +1,4 @@
-# e.g. ansible-playbook -K -b exps/run-papertests.yml -vvvv --extra-vars "data_file=params/raw_1mb.yml" ;
+# e.g. iansible-playbook -K -b exps/run-papertests.yml -vvvv --extra-vars "data_file=params/raw_1mb.yml" ;
 
 ---
 - hosts: localhost
