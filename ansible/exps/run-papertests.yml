@@ -18,3 +18,7 @@
         rados mkpool {{ pool_name }} ;
         ceph osd pool set {{ pool_name }} size 1 ;
         bin/run-papertests {{ data_path }} {{ res_path }}/res_{{ curr_datetime }}.txt {{ pool_name }} {{ test_type }} {{ obj_name }} ;
+
+    - name: "self-validation"
+        shell: |
+          echo "self-validate here!!!" ;
