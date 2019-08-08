@@ -13,7 +13,7 @@
   tasks:
     - name: "test paper_exps"
       shell: |
-        cd "/mnt/{{ format_devie }}/skyhook-ceph/build" ;
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         make -j12 run-papertests ;
         rados mkpool {{ pool_name }} ;
         ceph osd pool set {{ pool_name }} size 1 ;
