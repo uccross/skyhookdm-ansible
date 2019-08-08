@@ -27,3 +27,6 @@ test_type: 0
 
 # the identifier string for the object storing the data for this test run
 obj_name: test0
+
+# type of query operation, "sum" or "randomsearch"
+optype: sum

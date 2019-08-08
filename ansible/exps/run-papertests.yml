@@ -13,12 +13,20 @@
   tasks:
     - name: "test paper_exps"
       shell: |
+
+        # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
+        # compile the test driver
         make -j12 run-papertests ;
+
+        # make the test pool
         rados mkpool {{ pool_name }} ;
         ceph osd pool set {{ pool_name }} size 1 ;
-        bin/run-papertests {{ data_path }} {{ res_path }}/res_{{ curr_datetime }}.txt {{ pool_name }} {{ test_type }} {{ obj_name }} ;
 
-    - name: "self-validation"
-        shell: |
-          echo "self-validate here!!!" ;
+        # run the test
+        bin/run-papertests {{ data_path }} {{ res_path }}/res_{{ curr_datetime }}.txt {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} ;
+
+#    - name: "self-validation"
+#        shell: |
+#          echo "self-validate here!!!" ;
