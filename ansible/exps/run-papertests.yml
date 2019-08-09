@@ -24,7 +24,7 @@
     # derived vars
     curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
     result_dir_path: "./res_{{ test_id }}"
-    data_url:        "https://users.soe.ucsc.edu/~kmdahlgr/pdsw19/testdata/{{ data_filename }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/{{ data_filename }}"
 
   # ============================= #
   tasks:
