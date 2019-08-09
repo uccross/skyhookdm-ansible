@@ -34,7 +34,7 @@
       with_inventory_hostnames:
         - osds
 
-    - name: experiment: raw 1mb
+    - name: __experiment__ raw 1mb
       shell: |
         # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
