@@ -14,22 +14,23 @@
     # input vars
     format_device:    sda4
     data_filename:    dataset_arity3_50000_rows.txt
-    test_id:          fbucols_4per_arity3_1mb
+    exp_id :          orientation_designcosts_1mb
     pool_name:        paper_exps
     num_col_per_cols: 4 
+    test_id0:         fbucols_4per_1mb
+    test_id1:         fbucols_2per_1mb
+    test_id2:         fbucols_1per_1mb
 
     # derived vars
     curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    result_dir_path: "./res_{{ test_id }}"
+    result_dir_path: "./res_{{ exp_id }}"
     data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/{{ data_filename }}"
 
   # ============================= #
   tasks:
-    - name: drop all osd caches
-      shell: |
-        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
-      with_inventory_hostnames:
-        - osds
+
+    # -------------------------------------------------------- #
+    # EXPERIMENT PRELIMINARIES
 
     - name: __experiment__ environment setup
       shell: |
@@ -50,7 +51,14 @@
         ceph osd pool set {{ pool_name }} size 1 ;
 
     # -------------------------------------------------------- #
-    # write the test data to ceph
+    # WRITE THE TEST DATA TO CEPH
+
+    # DROP CACHES BEFORE WRITING!!!
+    - name: drop all osd caches
+      shell: |
+        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+      with_inventory_hostnames:
+        - osds
 
     # FBU_Cols arity-3 1mb (50,000 rows) => obj.0
     - name: __experiment__ write test data to ceph
@@ -84,7 +92,7 @@
                  --qdepth 10 \
                  --query flatbuf \
                  --select "*" \
-          > "{{result_dir_path }}/q1.txt" ; } 2>> "{{result_dir_path }}/q1.txt" ;
+          > "{{result_dir_path }}/{{ test_id0 }}_q1_match.txt" ; } 2>> "{{result_dir_path }}/{{ test_id0 }}_q1_time.txt" ;
 
     # Q2 : select all with predicates
     - name: __experiment__ Q2
@@ -99,7 +107,7 @@
                  --select "att0,lt,25;att1,lt,25.0;"  \
                  --project-cols att0,att1,att2,att3 \
                  --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" \
-          > "{{result_dir_path }}/q2.txt" ; } 2>> "{{result_dir_path }}/q2.txt" ;
+          > "{{result_dir_path }}/{{ test_id0 }}_q2_match.txt" ; } 2>> "{{result_dir_path }}/{{ test_id0 }}_q2_time.txt" ;
 
     # Q3 : select two with predicates
     - name: __experiment__ Q3
@@ -114,7 +122,7 @@
                  --select "att0,lt,25;att1,lt,25.0;"  \
                  --project-cols att0,att2 \
                  --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" \
-          > "{{result_dir_path }}/q3.txt" ; } 2>> "{{result_dir_path }}/q3.txt" ;
+          > "{{result_dir_path }}/{{ test_id0 }}_q3_match.txt" ; } 2>> "{{result_dir_path }}/{{ test_id0 }}_q3_time.txt" ;
 
     # Q4 : sum on att0
     - name: __experiment__ Q4
@@ -129,4 +137,4 @@
                  --select-preds ";att0,sum,0;" \
                  --table-name "atable" \
                  --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" \
-          > "{{result_dir_path }}/q4.txt" ; } 2>> "{{result_dir_path }}/q4.txt" ;
+          > "{{result_dir_path }}/{{ test_id0 }}_q4_match.txt" ; } 2>> "{{result_dir_path }}/{{ test_id0 }}_q4_time.txt" ;
