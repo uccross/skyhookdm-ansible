@@ -76,19 +76,20 @@
     - name: __experiment__ Q1
       shell: |
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        time bin/run-query \
+        { time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
                  --wthreads 1 \
                  --qdepth 10 \
                  --query flatbuf \
-                 --select "*"  > "{{result_dir_path }}/q1.txt" ;
+                 --select "*" \
+          > "{{result_dir_path }}/q1.txt" ; } 2>> "{{result_dir_path }}/q1.txt" ;
 
     # Q2 : select all with predicates
     - name: __experiment__ Q2
       shell: |
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        time bin/run-query \
+        { time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
                  --wthreads 1 \
@@ -96,13 +97,14 @@
                  --query flatbuf \
                  --select "att0,lt,25;att1,lt,25.0;"  \
                  --project-cols att0,att1,att2,att3 \
-                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;"  > "{{result_dir_path }}/q2.txt";
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" \
+          > "{{result_dir_path }}/q2.txt" ; } 2>> "{{result_dir_path }}/q2.txt" ;
 
     # Q3 : select two with predicates
     - name: __experiment__ Q3
       shell: |
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        time bin/run-query \
+        { time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
                  --wthreads 1 \
@@ -110,13 +112,14 @@
                  --query flatbuf \
                  --select "att0,lt,25;att1,lt,25.0;"  \
                  --project-cols att0,att2 \
-                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" > "{{result_dir_path }}/q3.txt" ;
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" \
+          > "{{result_dir_path }}/q3.txt" ; } 2>> "{{result_dir_path }}/q3.txt" ;
 
     # Q4 : sum on att0
     - name: __experiment__ Q4
       shell: |
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        time bin/run-query \
+        { time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
                  --wthreads 1 \
@@ -124,4 +127,5 @@
                  --query flatbuf \
                  --select-preds ";att0,sum,0;" \
                  --table-name "atable" \
-                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" > "{{result_dir_path }}/q4.txt" ;
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" \
+          > "{{result_dir_path }}/q4.txt" ; } 2>> "{{result_dir_path }}/q4.txt" ;
