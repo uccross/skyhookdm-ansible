@@ -1,7 +1,7 @@
 # e.g. time ansible-playbook -K -b exps/fbucols_4per_arity3_1mb.yml -vvvv ;
 
 ---
-- name: run setup_playbook to setup ceph cluster
+- name: run setup_playbook to setup ceph cluster and setup skyhook.
   import_playbook: ../setup_playbook.yml
 
 # ------------------------------------- #
@@ -12,10 +12,11 @@
   # ============================= #
   vars:
     # input vars
-    format_device: sda4
-    data_filename: dataset_arity3_50000_rows.txt
-    test_id:       fbucols_4per_arity3_1mb
-    pool_name:     paper_exps
+    format_device:    sda4
+    data_filename:    dataset_arity3_50000_rows.txt
+    test_id:          fbucols_4per_arity3_1mb
+    pool_name:        paper_exps
+    num_col_per_cols: 4 
 
     # derived vars
     curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
@@ -66,7 +67,7 @@
                          --targetoid obj.0 \
                          --targetpool tpchflatbuf \
                          --writeto ceph \
-                         --cols_per_fb 1 \
+                         --cols_per_fb {{ num_col_per_cols }} \
                          --targetformat SFT_FLATBUF_UNION_COL ;
 
     # -------------------------------------------------------- #
