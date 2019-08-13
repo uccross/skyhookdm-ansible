@@ -54,6 +54,7 @@
     # FBU_Cols arity-3 1mb (50,000 rows) => obj.0
     - name: __experiment__ write test data to ceph
       shell: |
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         bin/fbwriter_fbu --filename dataset_arity3_50000_rows.txt \
                          --write_type cols \
                          --debug yes \
@@ -74,6 +75,7 @@
     # Q1 : select all
     - name: __experiment__ Q1
       shell: |
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -85,6 +87,7 @@
     # Q2 : select all with predicates
     - name: __experiment__ Q2
       shell: |
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -98,6 +101,7 @@
     # Q3 : select two with predicates
     - name: __experiment__ Q3
       shell: |
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -111,6 +115,7 @@
     # Q4 : sum on att0
     - name: __experiment__ Q4
       shell: |
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
