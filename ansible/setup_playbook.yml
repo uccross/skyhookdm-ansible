@@ -18,7 +18,8 @@
         sudo su -c "yes | apt-get install postgresql-contrib" ;
 
 # clone skyhook on each node, 
-# run install-deps, make the source code, 
+# run install-deps, 
+# make the source code, 
 # install the generated tabular so.
 - hosts: all
   vars_files:
