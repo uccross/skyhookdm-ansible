@@ -10,4 +10,6 @@ if [[ "$HOSTNAME" == "client0"* ]]; then
   sudo apt-get install tmux -y ;
   cd ~ ;
   git clone https://github.com/KDahlgren/skyhook-ansible.git ;
+  cd skyhook-ansible ;
+  git submodule update --init ;
 fi
