@@ -51,10 +51,9 @@
     # -------------------------------------------------------- #
     # write the test data to ceph
 
+    # FBU_Cols arity-3 1mb (50,000 rows) => obj.0
     - name: __experiment__ write test data to ceph
       shell: |
-
-        # FBU_Cols arity-3 1mb (50,000 rows) => obj.0
         bin/fbwriter_fbu --filename dataset_arity3_50000_rows.txt \
                          --write_type cols \
                          --debug yes \
@@ -72,9 +71,9 @@
     # -------------------------------------------------------- #
     # run tests:
 
+    # Q1 : select all
     - name: __experiment__ Q1
       shell: |
-        # Q1 : select all
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -83,9 +82,9 @@
                  --query flatbuf \
                  --select "*"  > "{{result_dir_path }}/q1.txt" ;
 
+    # Q2 : select all with predicates
     - name: __experiment__ Q2
       shell: |
-        # Q2 : select all with predicates
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -96,9 +95,9 @@
                  --project-cols att0,att1,att2,att3 \
                  --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;"  > "{{result_dir_path }}/q2.txt";
 
+    # Q3 : select two with predicates
     - name: __experiment__ Q3
       shell: |
-        # Q3 : select two with predicates
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -109,9 +108,9 @@
                  --project-cols att0,att2 \
                  --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" > "{{result_dir_path }}/q3.txt" ;
 
+    # Q4 : sum on att0
     - name: __experiment__ Q4
       shell: |
-        # Q4 : sum on att0
         time bin/run-query \
                  --num-objs 1 \
                  --pool tpchflatbuf \
@@ -121,4 +120,3 @@
                  --select-preds ";att0,sum,0;" \
                  --table-name "atable" \
                  --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" > "{{result_dir_path }}/q4.txt" ;
-
