@@ -1,0 +1,124 @@
+# e.g. ansible-playbook -K -b exps/fbucols_4per_arity3_1mb.yml -vvvv ;
+
+---
+- name: run setup_playbook to setup ceph cluster
+  import_playbook: ../setup_playbook.yml
+
+# ------------------------------------- #
+# EXPERIMENT : FBU Cols 4/cols 1mb
+# ------------------------------------- #
+- hosts: clients
+
+  # ============================= #
+  vars:
+    # input vars
+    format_device: sda4
+    data_filename: dataset_arity3_50000_rows.txt
+    test_id:       fbucols_4per_arity3_1mb
+    pool_name:     paper_exps
+
+    # derived vars
+    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+    result_dir_path: "./res_{{ test_id }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/{{ data_filename }}"
+
+  # ============================= #
+  tasks:
+    - name: drop all osd caches
+      shell: |
+        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+      with_inventory_hostnames:
+        - osds
+
+    - name: __experiment__ environment setup
+      shell: |
+        # cd into the skyhook-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
+        # copy data
+        wget {{ data_url }} ;
+
+        # make results dir
+        mkdir {{ result_dir_path  }} ;
+
+        # compile the test driver
+        make -j12 cls_tabular run-query fbwriter_fbu
+
+        # make the test pool
+        rados mkpool {{ pool_name }} ;
+        ceph osd pool set {{ pool_name }} size 1 ;
+
+    # -------------------------------------------------------- #
+    # write the test data to ceph
+
+    - name: __experiment__ write test data to ceph
+      shell: |
+
+        # FBU_Cols arity-3 1mb (50,000 rows) => obj.0
+        bin/fbwriter_fbu --filename dataset_arity3_50000_rows.txt \
+                         --write_type cols \
+                         --debug yes \
+                         --schema_datatypes int,float,string \
+                         --schema_attnames att0,att1,att2 \
+                         --table_name arity3_1mb \
+                         --nrows 50000 \
+                         --ncols 3 \
+                         --targetoid obj.0 \
+                         --targetpool tpchflatbuf \
+                         --writeto ceph \
+                         --cols_per_fb 1 \
+                         --targetformat SFT_FLATBUF_UNION_COL ;
+
+    # -------------------------------------------------------- #
+    # run tests:
+
+    - name: __experiment__ Q1
+      shell: |
+        # Q1 : select all
+        time bin/run-query \
+                 --num-objs 1 \
+                 --pool tpchflatbuf \
+                 --wthreads 1 \
+                 --qdepth 10 \
+                 --query flatbuf \
+                 --select "*" ;
+
+    - name: __experiment__ Q2
+      shell: |
+        # Q2 : select all with predicates
+        time bin/run-query \
+                 --num-objs 1 \
+                 --pool tpchflatbuf \
+                 --wthreads 1 \
+                 --qdepth 10 \
+                 --query flatbuf \
+                 --select "att0,lt,25;att1,lt,25.0;"  \
+                 --project-cols att0,att1,att2,att3 \
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" ;
+
+    - name: __experiment__ Q3
+      shell: |
+        # Q3 : select two with predicates
+        time bin/run-query \
+                 --num-objs 1 \
+                 --pool tpchflatbuf \
+                 --wthreads 1 \
+                 --qdepth 10 \
+                 --query flatbuf \
+                 --select "att0,lt,25;att1,lt,25.0;"  \
+                 --project-cols att0,att2 \
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" ;
+
+    - name: __experiment__ Q4
+      shell: |
+        # Q4 : sum on att0
+        time bin/run-query \
+                 --num-objs 1 \
+                 --pool tpchflatbuf \
+                 --wthreads 1 \
+                 --qdepth 10 \
+                 --query flatbuf \
+                 --select-preds ";att0,sum,0;" \
+                 --table-name "atable" \
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" ;
+
