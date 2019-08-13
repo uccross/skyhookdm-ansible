@@ -1,4 +1,4 @@
-# e.g. ansible-playbook -K -b exps/fbucols_4per_arity3_1mb.yml -vvvv ;
+# e.g. time ansible-playbook -K -b exps/fbucols_4per_arity3_1mb.yml -vvvv ;
 
 ---
 - name: run setup_playbook to setup ceph cluster
@@ -81,7 +81,7 @@
                  --wthreads 1 \
                  --qdepth 10 \
                  --query flatbuf \
-                 --select "*" ;
+                 --select "*"  > "{{result_dir_path }}/q1.txt" ;
 
     - name: __experiment__ Q2
       shell: |
@@ -94,7 +94,7 @@
                  --query flatbuf \
                  --select "att0,lt,25;att1,lt,25.0;"  \
                  --project-cols att0,att1,att2,att3 \
-                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" ;
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;"  > "{{result_dir_path }}/q2.txt";
 
     - name: __experiment__ Q3
       shell: |
@@ -107,7 +107,7 @@
                  --query flatbuf \
                  --select "att0,lt,25;att1,lt,25.0;"  \
                  --project-cols att0,att2 \
-                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" ;
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" > "{{result_dir_path }}/q3.txt" ;
 
     - name: __experiment__ Q4
       shell: |
@@ -120,5 +120,5 @@
                  --query flatbuf \
                  --select-preds ";att0,sum,0;" \
                  --table-name "atable" \
-                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" ;
+                 --data-schema "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;" > "{{result_dir_path }}/q4.txt" ;
 
