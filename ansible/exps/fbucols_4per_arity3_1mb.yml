@@ -76,7 +76,9 @@
                          --targetpool tpchflatbuf \
                          --writeto ceph \
                          --cols_per_fb {{ num_col_per_cols }} \
-                         --targetformat SFT_FLATBUF_UNION_COL ;
+                         --targetformat SFT_FLATBUF_UNION_COL \
+                         --schema_iskey 0,0,0 \
+                         --schema_isnullable 0,0,0 ;
 
     # -------------------------------------------------------- #
     # run tests:

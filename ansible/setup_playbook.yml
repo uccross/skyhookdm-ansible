@@ -22,8 +22,11 @@
 # make the source code, 
 # install the generated tabular so.
 - hosts: all
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
   vars_files:
-    - ./vars/extra_vars.yml
+#    - ./vars/extra_vars.yml
+    - {{ install_vars_path }}
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
