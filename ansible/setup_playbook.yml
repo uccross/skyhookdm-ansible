@@ -24,6 +24,7 @@
 - hosts: all
   vars:
     local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
   vars_files:
 #    - ./vars/extra_vars.yml
     - {{ install_vars_path }}

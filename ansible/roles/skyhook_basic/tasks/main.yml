@@ -7,7 +7,7 @@
     - ./files/format-device.sh
 
 - name: "running format device"
-  shell: sh format-device.sh {{ user }} {{ format_device }} ;
+  shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
   ignore_errors: yes
 
 - name: "clone skyhook repo"
