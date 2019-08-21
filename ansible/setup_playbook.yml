@@ -26,8 +26,7 @@
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
   vars_files:
-#    - ./vars/extra_vars.yml
-    - "{{ install_vars_path }}"
+    - ./vars/install_vars_luminous_sda4.yml
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:

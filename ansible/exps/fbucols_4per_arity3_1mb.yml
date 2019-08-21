@@ -1,8 +1,8 @@
 # e.g. time ansible-playbook -K -b exps/fbucols_4per_arity3_1mb.yml -vvvv ;
 
 ---
-- name: run setup_playbook to setup ceph cluster and setup skyhook.
-  import_playbook: ../setup_playbook.yml
+#- name: run setup_playbook to setup ceph cluster and setup skyhook.
+#  import_playbook: ../setup_playbook.yml
 
 # ------------------------------------- #
 # EXPERIMENT : FBU Cols 4/cols 1mb
@@ -64,21 +64,9 @@
     - name: __experiment__ write test data to ceph
       shell: |
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        bin/fbwriter_fbu --filename dataset_arity3_50000_rows.txt \
-                         --write_type cols \
-                         --debug yes \
-                         --schema_datatypes int,float,string \
-                         --schema_attnames att0,att1,att2 \
-                         --table_name arity3_1mb \
-                         --nrows 50000 \
-                         --ncols 3 \
-                         --targetoid obj.0 \
-                         --targetpool tpchflatbuf \
-                         --writeto ceph \
-                         --cols_per_fb {{ num_col_per_cols }} \
-                         --targetformat SFT_FLATBUF_UNION_COL \
-                         --schema_iskey 0,0,0 \
-                         --schema_isnullable 0,0,0 ;
+        wget https://users.soe.ucsc.edu/~kdahlgren/pdsw19/skyhook.SFT_FLATBUF_UNION_ROW.obj.0-arity4-6rows ;
+        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} \
+              skyhook.SFT_FLATBUF_UNION_ROW.obj.0-arity4-6rows ;
 
     # -------------------------------------------------------- #
     # run tests:
