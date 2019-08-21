@@ -27,7 +27,7 @@
     this_user:  "{{ lookup('env','USER') }}"
   vars_files:
 #    - ./vars/extra_vars.yml
-    - {{ install_vars_path }}
+    - "{{ install_vars_path }}"
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
