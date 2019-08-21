@@ -31,3 +31,14 @@
     DEBIAN_FRONTEND: noninteractive
   roles:
     - skyhook_basic
+
+- hosts: clients
+  tasks:
+    - name: "copy experiment validation files"
+      copy:
+        src: "{{ item }}"
+        dest: "{{ local_home }}"
+        mode: '0644'
+      with_items:
+        - ./files/validate_match.py
+        - ./files/validate_time_assert.py
