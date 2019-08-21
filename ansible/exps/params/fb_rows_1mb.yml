@@ -1,6 +1,0 @@
----
-data_path: /proj/skyhook-PG0/kat_stuff/data/dataset_newline_1mb.txt
-res_path: /proj/skyhook-PG0/kat_stuff/res/
-pool_name: paper_exps
-test_type: 2
-obj_name: test0
