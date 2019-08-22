@@ -32,13 +32,25 @@
   roles:
     - skyhook_basic
 
+# copy helper files to build diretory.
 - hosts: clients
   tasks:
-    - name: "copy experiment validation files"
+    - name: "copy experiment helper scripts to build directory"
       copy:
         src: "{{ item }}"
-        dest: "{{ local_home }}"
+        dest: "/mnt/{{ format_device }}/skyhook-ceph/build"
         mode: '0644'
       with_items:
         - ./files/validate_match.py
         - ./files/validate_time_assert.py
+        - ./files/get_expected.sh
+
+    - name: "copy experiment query files to build directory"
+      copy:
+        src: "{{ item }}"
+        dest: "/mnt/{{ format_device }}/skyhook-ceph/build"
+        mode: '0644'
+      with_items:
+        - ./exp/query_files/SELECT_ALL.sh
+        - ./exp/query_files/PRED_QUERY.sh
+        - ./exp/query_files/AGG_QUERY.sh
