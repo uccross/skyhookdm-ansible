@@ -34,6 +34,8 @@
 
 # copy helper files to build diretory.
 - hosts: clients
+  vars_files:
+    - ./vars/install_vars_luminous_sda4.yml
   tasks:
     - name: "copy experiment helper scripts to build directory"
       copy:
@@ -51,6 +53,6 @@
         dest: "/mnt/{{ format_device }}/skyhook-ceph/build"
         mode: '0644'
       with_items:
-        - ./exp/query_files/SELECT_ALL.sh
-        - ./exp/query_files/PRED_QUERY.sh
-        - ./exp/query_files/AGG_QUERY.sh
+        - ./exps/query_files/SELECT_ALL.sh
+        - ./exps/query_files/PRED_QUERY.sh
+        - ./exps/query_files/AGG_QUERY.sh
