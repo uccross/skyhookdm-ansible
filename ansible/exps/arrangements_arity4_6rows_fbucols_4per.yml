@@ -17,7 +17,7 @@
     data_filename:    skyhook.SFT_FLATBUF_UNION_ROW.obj.0-arity4-6rows
     pool_name:        test_exps
     num_col_per_cols: 4 
-    test_id0:         arrangement_arity4_6rows_fbucols_4per
+    test_id:          arrangement_arity4_6rows_fbucols_4per
 
     data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
 
