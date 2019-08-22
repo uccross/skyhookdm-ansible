@@ -20,7 +20,7 @@
     ceph osd pool set {{ pool_name }} size 1 ;
 
     # make sure no objects exist in the pool
-    for i in `rados -p  ls; do echo $i; rados -p  rm $i; done’ ;
+    bash clear_objs.sh {{ pool_name }} ;
 
 # -------------------------------------------------------- #
 # WRITE THE TEST DATA TO CEPH

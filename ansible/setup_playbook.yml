@@ -46,6 +46,7 @@
         - ./files/validate_match.py
         - ./files/validate_time_assert.py
         - ./files/get_expected.sh
+        - ./files/clear_objs.sh
 
     - name: "copy experiment query files to build directory"
       copy:
