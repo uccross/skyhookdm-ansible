@@ -1,11 +1,77 @@
-# e.g. time ansible-playbook -K -b exps/arrangements_arity4_6rows_fbucols_4per.yml -vvvv ;
+# e.g. time ansible-playbook -K -b exps/formats_arity4_6rows.yml -vvvv ;
 
 ---
 #- name: run setup_playbook to setup ceph cluster and setup skyhook.
 #  import_playbook: ../setup_playbook.yml
 
 # ------------------------------------- #
-# EXPERIMENT : FBU Cols 4/cols 1mb
+# EXPERIMENT : FBX Rows example
+# ------------------------------------- #
+- hosts: clients
+  # ============================= #
+  vars:
+    # input vars
+    num_objs:         1
+    format_device:    sda4
+    data_filename:    fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.atable.0.1-1-arity4-6rows
+    pool_name:        test_exps
+    num_col_per_cols: 4 
+    test_id:          formats_arity4_6rows_fbxrows
+
+    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
+
+    select_preds2: "att0,lt,25;att1,lt,25.0;"
+    project_cols2: "att0,att1,att2,att3"
+
+    select_preds3: "att0,lt,25;att1,lt,25.0;"
+    project_cols3: "att0,att2"
+
+    select_preds4: ";att0,sum,0;"
+    table_name4:   "atable"
+    
+    # derived vars
+    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/{{ data_filename }}"
+
+  # ============================= #
+  tasks:
+  - import_tasks: exp_helper.yml
+
+# ------------------------------------- #
+# EXPERIMENT : FBU Rows example
+# ------------------------------------- #
+- hosts: clients
+  # ============================= #
+  vars:
+    # input vars
+    num_objs:         1
+    format_device:    sda4
+    data_filename:    skyhook.SFT_FLATBUF_UNION_ROW.obj.0-arity4-6rows
+    pool_name:        test_exps
+    num_col_per_cols: 4 
+    test_id:          formats_arity4_6rows_fburows
+
+    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
+
+    select_preds2: "att0,lt,25;att1,lt,25.0;"
+    project_cols2: "att0,att1,att2,att3"
+
+    select_preds3: "att0,lt,25;att1,lt,25.0;"
+    project_cols3: "att0,att2"
+
+    select_preds4: ";att0,sum,0;"
+    table_name4:   "atable"
+    
+    # derived vars
+    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/{{ data_filename }}"
+
+  # ============================= #
+  tasks:
+  - import_tasks: exp_helper.yml
+
+# ------------------------------------- #
+# EXPERIMENT : FBU Cols (4/cols) example
 # ------------------------------------- #
 - hosts: clients
   # ============================= #
@@ -16,7 +82,7 @@
     data_filename:    skyhook.SFT_FLATBUF_UNION_COL.obj.0-arity4-6rows-fbucols-4per
     pool_name:        test_exps
     num_col_per_cols: 4 
-    test_id:          arrangement_arity4_6rows_fbucols_4per
+    test_id:          formats_arity4_6rows_fbucols_4per
 
     data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
 
@@ -38,70 +104,37 @@
   - import_tasks: exp_helper.yml
 
 # ------------------------------------- #
-# EXPERIMENT : FBU Cols 2/cols 1mb
+# EXPERIMENT : Arrow example
 # ------------------------------------- #
-- hosts: clients
-  # ============================= #
-  vars:
-    # input vars
-    num_objs:         1
-    format_device:    sda4
-    data_filename:    skyhook.SFT_FLATBUF_UNION_COL.obj.0-arity4-6rows-fbucols-2per
-    pool_name:        test_exps
-    num_col_per_cols: 2 
-    test_id:          arrangement_arity4_6rows_fbucols_2per
-
-    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
-
-    select_preds2: "att0,lt,25;att1,lt,25.0;"
-    project_cols2: "att0,att1,att2,att3"
-
-    select_preds3: "att0,lt,25;att1,lt,25.0;"
-    project_cols3: "att0,att2"
-
-    select_preds4: ";att0,sum,0;"
-    table_name4:   "atable"
-    
-    # derived vars
-    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/{{ data_filename }}"
-
-  # ============================= #
-  tasks:
-  - import_tasks: exp_helper.yml
-
-# ------------------------------------- #
-# EXPERIMENT : FBU Cols 1/cols 1mb
-# ------------------------------------- #
-- hosts: clients
-  # ============================= #
-  vars:
-    # input vars
-    num_objs:         1
-    format_device:    sda4
-    data_filename:    skyhook.SFT_FLATBUF_UNION_COL.obj.0-arity4-6rows-fbucols-1per
-    pool_name:        test_exps
-    num_col_per_cols: 1 
-    test_id:          arrangement_arity4_6rows_fbucols_1per
-
-    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
-
-    select_preds2: "att0,lt,25;att1,lt,25.0;"
-    project_cols2: "att0,att1,att2,att3"
-
-    select_preds3: "att0,lt,25;att1,lt,25.0;"
-    project_cols3: "att0,att2"
-
-    select_preds4: ";att0,sum,0;"
-    table_name4:   "atable"
-    
-    # derived vars
-    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/{{ data_filename }}"
-
-  # ============================= #
-  tasks:
-  - import_tasks: exp_helper.yml
+#- hosts: clients
+#  # ============================= #
+#  vars:
+#    # input vars
+#    num_objs:         1
+#    format_device:    sda4
+#    data_filename:    ???
+#    pool_name:        test_exps
+#    num_col_per_cols: 4 
+#    test_id:          formats_arity4_6rows_arrow
+#
+#    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
+#
+#    select_preds2: "att0,lt,25;att1,lt,25.0;"
+#    project_cols2: "att0,att1,att2,att3"
+#
+#    select_preds3: "att0,lt,25;att1,lt,25.0;"
+#    project_cols3: "att0,att2"
+#
+#    select_preds4: ";att0,sum,0;"
+#    table_name4:   "atable"
+#    
+#    # derived vars
+#    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+#    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/{{ data_filename }}"
+#
+#  # ============================= #
+#  tasks:
+#  - import_tasks: exp_helper.yml
 
 # ------------------------------------- #
 # SELF_VALIDATION ON TIME FILES
