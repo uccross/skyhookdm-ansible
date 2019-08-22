@@ -1,229 +1,124 @@
-# e.g. time ansible-playbook -K -b exps/arrangements_arity4_6rows_fbucols_4per.yml -vvvv ;
+# -------------------------------------------------------- #
+# EXPERIMENT PRELIMINARIES
 
----
-#- name: run setup_playbook to setup ceph cluster and setup skyhook.
-#  import_playbook: ../setup_playbook.yml
+- name: __experiment__ environment setup
+  shell: |
+    # cd into the skyhook-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
 
-# ------------------------------------- #
-# EXPERIMENT : FBU Cols 4/cols 1mb
-# ------------------------------------- #
-- hosts: clients
+    # copy data
+    wget {{ data_url }} ;
 
-  # ============================= #
-  vars:
-    # input vars
-    num_objs:         1
-    format_device:    sda4
-    data_filename:    skyhook.SFT_FLATBUF_UNION_ROW.obj.0-arity4-6rows
-    pool_name:        test_exps
-    num_col_per_cols: 4 
-    test_id:          arrangement_arity4_6rows_fbucols_4per
+    # get expected results files
+    bash get_expected.sh {{ test_id }} ;
 
-    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
+    # compile the test driver
+    make -j12 cls_tabular run-query ;
 
-    select_preds2: "att0,lt,25;att1,lt,25.0;"
-    project_cols2: "att0,att1,att2,att3"
+    # make the test pool
+    rados mkpool {{ pool_name }} ;
+    ceph osd pool set {{ pool_name }} size 1 ;
 
-    select_preds3: "att0,lt,25;att1,lt,25.0;"
-    project_cols3: "att0,att2"
+# -------------------------------------------------------- #
+# WRITE THE TEST DATA TO CEPH
 
-    select_preds4: ";att0,sum,0;"
-    table_name4:   "atable"
-    
-    # derived vars
-    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/{{ data_filename }}"
+# DROP CACHES BEFORE WRITING!!!
+- name: drop all osd caches
+  shell: |
+    ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+  with_inventory_hostnames:
+    - osds
 
-  # ============================= #
-  tasks:
+# WRITE TO CEPH
+- name: __experiment__ write test data to ceph
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} {{ data_filename }} ;
 
-    # -------------------------------------------------------- #
-    # EXPERIMENT PRELIMINARIES
+# -------------------------------------------------------- #
+# RUN TESTS:
 
-    - name: __experiment__ environment setup
-      shell: |
-        # cd into the skyhook-ceph build dir
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#######################################################
+# Q1 : select all
+- name: __experiment__ Q1
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    bash "SELECT_ALL.sh" \
+          {{ num_objs }} \
+          {{ pool_name }} \
+         "./{{ test_id }}_q1_match.txt" \
+         "./{{ test_id }}_q1_time.txt" ;
 
-        # copy data
-        wget {{ data_url }} ;
+- name: __experiment__ Q1 validate results match
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    python validate_match.py \
+           "./{{ test_id }}_q1_match.txt" \
+           "./expected_{{ test_id }}_q1_match.txt"  ;
+##################################
 
-        # get expected results files
-        bash get_expected.sh {{ test_id }} ;
+#######################################################
+# Q2 : select all with predicates
+- name: __experiment__ Q2
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    bash "PRED_QUERY.sh" \
+          {{ num_objs }} \
+          {{ pool_name }} \
+         "./{{ test_id }}_q2_match.txt" \
+         "./{{ test_id }}_q2_time.txt" \
+         "{{ select_preds2 }}" \
+         "{{ project_cols2 }}" \
+         "{{ data_schema }}" ;
 
-        # compile the test driver
-        make -j12 cls_tabular run-query ;
+- name: __experiment__ Q2 validate results match
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    python validate_match.py \
+           "./{{ test_id }}_q2_match.txt" \
+           "./expected_{{ test_id }}_q2_match.txt"  ;
+##################################
 
-        # make the test pool
-        rados mkpool {{ pool_name }} ;
-        ceph osd pool set {{ pool_name }} size 1 ;
+#######################################################
+# Q3 : select some with predicates
+- name: __experiment__ Q3
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    bash "PRED_QUERY.sh" \
+          {{ num_objs }} \
+          {{ pool_name }} \
+         "./{{ test_id }}_q3_match.txt" \
+         "./{{ test_id }}_q3_time.txt" \
+         "{{ select_preds3 }}" \
+         "{{ project_cols3 }}" \
+         "{{ data_schema }}" ;
 
-    # -------------------------------------------------------- #
-    # WRITE THE TEST DATA TO CEPH
+- name: __experiment__ Q3 validate results match
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    python validate_match.py \
+           "./{{ test_id }}_q3_match.txt" \
+           "./expected_{{ test_id }}_q3_match.txt"  ;
+##################################
 
-    # DROP CACHES BEFORE WRITING!!!
-    - name: drop all osd caches
-      shell: |
-        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
-      with_inventory_hostnames:
-        - osds
+#######################################################
+# Q4 : sum
+- name: __experiment__ Q4
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    bash "AGG_QUERY.sh" \
+          {{ num_objs }} \
+          {{ pool_name }} \
+         "./{{ test_id }}_q4_match.txt" \
+         "./{{ test_id }}_q4_time.txt" \
+         "{{ select_preds4 }}" \
+         "{{ table_name4 }}" \
+         "{{ data_schema }}" ;
 
-    # WRITE TO CEPH
-    - name: __experiment__ write test data to ceph
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} {{ data_filename }} ;
-
-    # -------------------------------------------------------- #
-    # RUN TESTS:
-
-    #######################################################
-    # Q1 : select all
-    - name: __experiment__ Q1
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        bash "SELECT_ALL.sh" \
-              {{ num_objs }} \
-              {{ pool_name }} \
-             "./{{ test_id }}_q1_match.txt" \
-             "./{{ test_id }}_q1_time.txt" ;
-
-    - name: __experiment__ Q1 validate results match
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        python validate_match.py \
-               "./{{ test_id }}_q1_match.txt" \
-               "./expected_{{ test_id }}_q1_match.txt"  ;
-    ##################################
-
-    #######################################################
-    # Q2 : select all with predicates
-    - name: __experiment__ Q2
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        bash "PRED_QUERY.sh" \
-              {{ num_objs }} \
-              {{ pool_name }} \
-             "./{{ test_id }}_q2_match.txt" \
-             "./{{ test_id }}_q2_time.txt" \
-             "{{ select_preds2 }}" \
-             "{{ project_cols2 }}" \
-             "{{ data_schema }}" ;
-
-    - name: __experiment__ Q2 validate results match
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        python validate_match.py \
-               "./{{ test_id }}_q2_match.txt" \
-               "./expected_{{ test_id }}_q2_match.txt"  ;
-    ##################################
-
-    #######################################################
-    # Q3 : select some with predicates
-    - name: __experiment__ Q3
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        bash "PRED_QUERY.sh" \
-              {{ num_objs }} \
-              {{ pool_name }} \
-             "./{{ test_id }}_q3_match.txt" \
-             "./{{ test_id }}_q3_time.txt" \
-             "{{ select_preds3 }}" \
-             "{{ project_cols3 }}" \
-             "{{ data_schema }}" ;
-
-    - name: __experiment__ Q3 validate results match
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        python validate_match.py \
-               "./{{ test_id }}_q3_match.txt" \
-               "./expected_{{ test_id }}_q3_match.txt"  ;
-    ##################################
-
-    #######################################################
-    # Q4 : sum
-    - name: __experiment__ Q4
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        bash "AGG_QUERY.sh" \
-              {{ num_objs }} \
-              {{ pool_name }} \
-             "./{{ test_id }}_q4_match.txt" \
-             "./{{ test_id }}_q4_time.txt" \
-             "{{ select_preds4 }}" \
-             "{{ table_name4 }}" \
-             "{{ data_schema }}" ;
-
-    - name: __experiment__ Q4 validate results match
-      shell: |
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        python validate_match.py \
-               "./{{ test_id }}_q4_match.txt" \
-               "./expected_{{ test_id }}_q4_match.txt"  ;
-    ##################################
-
-# ------------------------------------- #
-# SELF_VALIDATION ON TIME FILES
-# ------------------------------------- #
-#- hosts: clients
-#  # ============================= #
-#  vars:
-#    # input vars
-#    test_id0_1mb: fbucols_4per_1mb
-#    test_id1_1mb: fbucols_2per_1mb
-#    test_id2_1mb: fbucols_1per_1mb
-#
-#    test_id0_10mb: fbucols_4per_10mb
-#    test_id1_10mb: fbucols_2per_10mb
-#    test_id2_10mb: fbucols_1per_10mb
-#
-#    test_id0_100mb: fbucols_4per_100mb
-#    test_id1_100mb: fbucols_2per_100mb
-#    test_id2_100mb: fbucols_1per_100mb
-#
-#  # ============================= #
-#  tasks:
-#
-#    # -------------------------------------------------------- #
-#    - name: __experiment__ Q1 validate time asserts fbucols_4per
-#      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_1mb }}_q1_time.txt" \
-#               "./{{ test_id0_10mb }}_q1_time.txt"  ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_10mb }}_q1_time.txt" \
-#               "./{{ test_id0_100mb }}_q1_time.txt"  ;
-#
-#    # -------------------------------------------------------- #
-#    - name: __experiment__ Q2 validate time asserts fbucols_4per
-#      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_1mb }}_q2_time.txt" \
-#               "./{{ test_id0_10mb }}_q2_time.txt"  ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_10mb }}_q2_time.txt" \
-#               "./{{ test_id0_100mb }}_q2_time.txt"  ;
-#
-#    # -------------------------------------------------------- #
-#    - name: __experiment__ Q3 validate time asserts fbucols_4per
-#      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_1mb }}_q3_time.txt" \
-#               "./{{ test_id0_10mb }}_q3_time.txt"  ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_10mb }}_q3_time.txt" \
-#               "./{{ test_id0_100mb }}_q3_time.txt"  ;
-#
-#    # -------------------------------------------------------- #
-#    - name: __experiment__ Q4 validate time asserts fbucols_4per
-#      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_1mb }}_q4_time.txt" \
-#               "./{{ test_id0_10mb }}_q4_time.txt"  ;
-#        python validate_time_assert.py \
-#               "./{{ test_id0_10mb }}_q4_time.txt" \
-#               "./{{ test_id0_100mb }}_q4_time.txt"  ;
+- name: __experiment__ Q4 validate results match
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    python validate_match.py \
+           "./{{ test_id }}_q4_match.txt" \
+           "./expected_{{ test_id }}_q4_match.txt"  ;
+##################################
