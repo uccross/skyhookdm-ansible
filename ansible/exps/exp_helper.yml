@@ -16,8 +16,10 @@
     make -j12 cls_tabular run-query ;
 
     # make the test pool
+    ceph osd pool delete {{ pool_name }} ;
     rados mkpool {{ pool_name }} ;
     ceph osd pool set {{ pool_name }} size 1 ;
+    ceph osd pool set {{ pool_name }} pg_num 128 ;
 
     # make sure no objects exist in the pool
     bash clear_objs.sh {{ pool_name }} ;
