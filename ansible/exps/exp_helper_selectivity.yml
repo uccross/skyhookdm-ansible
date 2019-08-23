@@ -1,0 +1,64 @@
+# -------------------------------------------------------- #
+# EXPERIMENT PRELIMINARIES
+
+- name: __experiment__ environment setup
+  shell: |
+    # cd into the skyhook-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
+    # copy data and untar
+    wget "{{ data_url }}/{{ tar_file_name }}" ;
+    tar -xzvf {{ tar_file_name }} -C . ;
+
+    # get expected results files
+    bash get_expected.sh {{ test_id }} ;
+
+    # compile the test driver
+    make -j12 cls_tabular run-query ;
+
+    # make the test pool
+    ceph osd pool delete {{ pool_name }} ;
+    rados mkpool {{ pool_name }} ;
+    ceph osd pool set {{ pool_name }} size 1 ;
+    ceph osd pool set {{ pool_name }} pg_num 128 ;
+
+    # make sure no objects exist in the pool
+    bash clear_objs.sh {{ pool_name }} ;
+
+# -------------------------------------------------------- #
+# WRITE THE TEST DATA TO CEPH
+
+# DROP CACHES BEFORE WRITING!!!
+- name: drop all osd caches
+  shell: |
+    ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+  with_inventory_hostnames:
+    - osds
+
+# WRITE TO CEPH
+- name: __experiment__ write test data to ceph
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} {{ data_file_prefix }} ;
+
+# -------------------------------------------------------- #
+# RUN TESTS:
+
+#######################################################
+# Q0 : selectivity att0 1%
+- name: __experiment__ Q0 selectivity att0 1%
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    bash "PREDS_QUERY.sh" \
+          {{ num_objs }} \
+          {{ pool_name }} \
+         "./{{ test_id }}_q1_match.txt" \
+         "./{{ test_id }}_q1_time.txt" ;
+
+- name: __experiment__ Q0 validate results match
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    python validate_match.py \
+           "./{{ test_id }}_q1_match.txt" \
+           "./expected_{{ test_id }}_q1_match.txt"  ;
+##################################
