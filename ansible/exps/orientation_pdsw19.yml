@@ -12,29 +12,21 @@
   # ============================= #
   vars:
     # input vars
-    num_objs:         1
+    num_objs:         100
     format_device:    sda4
-    data_filename:    skyhook.SFT_FLATBUF_UNION_ROW.obj.0-arity4-6rows
     pool_name:        test_exps
     num_col_per_cols: 4 
-    test_id:          orientations_arity4_6rows_fburows
+    test_id:          orientations_fbxrows_arity3_1mb_100objs
 
-    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ; 3 8 0 0 ATT3 ;"
+    data_schema: "0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;"
 
-    select_preds2: "att0,lt,25;att1,lt,25.0;"
-    project_cols2: "att0,att1,att2,att3"
+    select_preds0: "att0,lt,11;"
+    project_cols0: "att0"
 
-    select_preds3: "att0,lt,25;att1,lt,25.0;"
-    project_cols3: "att0,att2"
-
-    select_preds4: ";att0,sum,0;"
-    table_name4:   "atable"
-    
-    # derived vars
     curr_datetime:    "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
     data_url:         "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/"
-    tar_file_name:    "fburows-arity3-1mb-100objs.tar.gz"
-    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.fburows-arity3-1mb-100objs.*"
+    tar_file_name:    "fbxrows-arity3-1mb-100objs.tar.gz"
+    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.testdata.*"
 
   # ============================= #
   tasks:
