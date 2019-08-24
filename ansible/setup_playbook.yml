@@ -62,5 +62,5 @@
         - ./exps/query_files/AGG_QUERY.sh
 
     - name: "running format device"
-      shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
+      shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
       ignore_errors: yes
