@@ -10,9 +10,9 @@
   shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
   ignore_errors: yes
 
-- name: "running format secondary device"
-  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
-  ignore_errors: yes
+#- name: "running format secondary device"
+#  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
+#  ignore_errors: yes
 
 - name: "clone skyhook repo"
   shell: |
