@@ -57,3 +57,7 @@
         - ./exps/query_files/SELECT_ALL.sh
         - ./exps/query_files/PRED_QUERY.sh
         - ./exps/query_files/AGG_QUERY.sh
+
+    - name: "running format device"
+      shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
+      ignore_errors: yes

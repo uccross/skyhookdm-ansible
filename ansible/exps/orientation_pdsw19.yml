@@ -10,6 +10,8 @@
 # ------------------------------------- #
 - hosts: clients
   # ============================= #
+  vars_files:
+    - ../vars/install_vars_luminous_sda4.yml
   vars:
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
@@ -42,6 +44,8 @@
 # ------------------------------------- #
 - hosts: clients
   # ============================= #
+  vars_files:
+    - ../vars/install_vars_luminous_sda4.yml
   vars:
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
