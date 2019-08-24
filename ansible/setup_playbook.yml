@@ -34,6 +34,9 @@
 
 # copy helper files to build diretory.
 - hosts: clients
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
   vars_files:
     - ./vars/install_vars_luminous_sda4.yml
   tasks:
