@@ -39,26 +39,29 @@
 - name: __experiment__ write test data to ceph
   shell: |
     cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} {{ data_file_prefix }} ;
+    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} "./{{ tar_dir }}/{{ data_file_prefix }}" ;
 
 # -------------------------------------------------------- #
 # RUN TESTS:
 
 #######################################################
 # Q0 : selectivity att0 1%
-- name: __experiment__ Q0 selectivity att0 1%
+- name: __experiment__ Q0 selectivity att0 1-percent
   shell: |
     cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-    bash "PREDS_QUERY.sh" \
-          {{ num_objs }} \
-          {{ pool_name }} \
-         "./{{ test_id }}_q1_match.txt" \
-         "./{{ test_id }}_q1_time.txt" ;
+        bash "PRED_QUERY.sh" \
+              {{ num_objs }} \
+              {{ pool_name }} \
+             "./{{ test_id }}_q0_match.txt" \
+             "./{{ test_id }}_q0_time.txt" \
+             {{ select_preds0 }} \
+             {{ project_cols0 }} \
+             {{ data_schema0 }} ;
 
-- name: __experiment__ Q0 validate results match
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-    python validate_match.py \
-           "./{{ test_id }}_q1_match.txt" \
-           "./expected_{{ test_id }}_q1_match.txt"  ;
+#- name: __experiment__ Q0 validate results match
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#    python validate_match.py \
+#           "./{{ test_id }}_q0_match.txt" \
+#           "./expected_{{ test_id }}_q0_match.txt"  ;
 ##################################
