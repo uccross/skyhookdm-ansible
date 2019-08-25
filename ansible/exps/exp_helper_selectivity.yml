@@ -43,10 +43,10 @@
 # WRITE THE TEST DATA TO CEPH
 
 # WRITE TO CEPH
-- name: __experiment__ write test data to ceph
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} "/mnt/{{ format_secondary_device }}/{{ tar_dir }}/{{ data_file_prefix }}" ;
+#- name: __experiment__ write test data to ceph
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} "/mnt/{{ format_secondary_device }}/{{ tar_dir }}/{{ data_file_prefix }}" ;
 
 # -------------------------------------------------------- #
 # RUN TESTS:
@@ -73,10 +73,3 @@
 #           "./{{ test_id }}_q0_match.txt" \
 #           "./expected_{{ test_id }}_q0_match.txt"  ;
 ##################################
-
-# -------------------------------------------------------- #
-# EXPERIMENT CLEANUP
-
-- name: __experiment__ environment cleanup
-  shell: |
-    rm -rf "/mnt/{{ format_secondary_device }}/{{ tar_dir }}" ;
