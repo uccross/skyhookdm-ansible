@@ -52,6 +52,8 @@
         - ./files/clear_objs.sh
         - ./files/scp_and_write_data.py
         - ./files/rsync_command.sh
+        - ./files/rados_put.sh
+        - ./files/rados-store-glob.sh
 
     - name: "copy experiment query files to build directory"
       copy:

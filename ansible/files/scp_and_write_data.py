@@ -12,7 +12,7 @@ format_secondary_device = sys.argv[5]
 pool_name               = sys.argv[6]
 
 # get file names from remote storage
-remote_files_str = subprocess.check_output(["bash", \
+remote_files_str = subprocess.check_output(["sudo", "bash", \
                                             "rsync_command.sh", \
                                             "kat", \
                                             data_node_addr, \
