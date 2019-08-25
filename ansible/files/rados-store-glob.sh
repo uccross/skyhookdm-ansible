@@ -4,7 +4,7 @@ set -ex
 
 pool=$1
 objfile=$2
-objnum=$2
+objnum=$3
 
 echo "Loading obj.$objnum into pool $pool..."
 objname="obj.${objnum}"
