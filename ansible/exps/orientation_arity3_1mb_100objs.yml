@@ -31,7 +31,8 @@
     data_node_addr:   "128.105.144.251"
     data_path:        "/mnt/sda4/arity3datasets/flatflex/"
     data_dir:         "fbxrows-arity3-1mb-100objs"
-    data_file_prefix: "fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.testdata.*"
+    data_file_prefix: "fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.testdata."
+    data_file_suffix: ".1-1"
 
   # ============================= #
   tasks:

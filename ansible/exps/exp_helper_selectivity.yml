@@ -2,13 +2,13 @@
 # EXPERIMENT PRELIMINARIES
 
 # DROP CACHES BEFORE WRITING!!!
-- name: drop all osd caches
-  shell: |
-    ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
-  with_inventory_hostnames:
-    - osds
+#- name: drop all osd caches
+#  shell: |
+#    ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+#  with_inventory_hostnames:
+#    - osds
 
-- name: __experiment__ environment setup
+- name: __experiment__ environment setup 0
   shell: |
     # cd into the skyhook-ceph build dir
     cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
@@ -16,12 +16,28 @@
     # make sure no objects exist in the pool
     bash clear_objs.sh {{ pool_name }} ;
 
+    #- name: __experiment__ environment setup 1
+    #  shell: |
+    #    # cd into the skyhook-ceph build dir
+    #    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    #
+    #    ceph osd pool delete {{ pool_name }} ;
+    #    ceph osd pool delete {{ pool_name }} {{ pool_name }} --yes-i-really-mean-it ;
+
+- name: __experiment__ environment setup 2
+  shell: |
+    # cd into the skyhook-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
     # make the test pool
-    ceph osd pool delete {{ pool_name }} ;
-    ceph osd pool delete {{ pool_name }} {{ pool_name }} --yes-i-really-mean-it ;
     rados mkpool {{ pool_name }} ;
     ceph osd pool set {{ pool_name }} size 1 ;
     ceph osd pool set {{ pool_name }} pg_num 128 ;
+
+- name: __experiment__ environment setup 3
+  shell: |
+    # cd into the skyhook-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
 
     # copy data and untar
     python scp_and_write_data.py \
@@ -29,11 +45,16 @@
                  {{ data_node_addr }} \
                  {{ data_path }} \
                  {{ data_dir }} \
+                 {{ data_file_prefix }} \
+                 {{ data_file_suffix }} \
                  {{ format_secondary_device }} \
-                 {{ pool_name }} ;
+                 {{ pool_name }} \
+                 {{ num_objs }} ;
 
-    # get expected results files
-    #bash get_expected.sh {{ test_id }} ;
+- name: __experiment__ environment setup 4
+  shell: |
+    # cd into the skyhook-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
 
     # compile the test driver
     make -j12 cls_tabular run-query ;
