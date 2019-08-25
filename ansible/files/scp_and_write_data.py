@@ -21,22 +21,25 @@ remote_files_str = remote_files_str.rstrip() ;
 remote_files_list = [ f1.split()[-1] for f1 in [ f for f in remote_files_str.split("\n") ] ]
 #print remote_files_list
 
+obj_counter=0
 for f in remote_files_list :
   # scp one object file at a time into secondary storage on local
   cmd0 = "su - " + this_user + " -c 'scp -o StrictHostKeyChecking=no -r " + \
              this_user + "@" + data_node_addr + ":" + data_path + "/" + \
-             data_dir + "/" + f + " /mnt/" + format_secondary_device + "/'"
+             data_dir + "/" + f + " /mnt/" + format_secondary_device + "/'" + " ;"
+  print cmd0
+  os.system( cmd0 )
 
   # load object file into ceph
-  cmd1 = "yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh " +  \
-         pool_name + " /mnt/" + format_secondary_device + "/" + f
+  remote_files_str = subprocess.check_output(["bash", \
+                                              "rados_put.sh", \
+                                              pool_name, \
+                                              format_secondary_device, \
+                                              f, \
+                                              str( obj_counter )])
+  obj_counter += 1
 
   # delete the object file from local
-  cmd2 = "rm -rf /mnt/" + format_secondary_device + "/" + f
-
-  print cmd0
-  print cmd1
+  cmd2 = "rm -rf /mnt/" + format_secondary_device + "/" + f + " ; sleep 1 ;"
   print cmd2
-  os.system( cmd0 )
-  os.system( cmd1 )
   os.system( cmd2 )
