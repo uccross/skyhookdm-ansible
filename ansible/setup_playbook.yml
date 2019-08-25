@@ -50,6 +50,8 @@
         - ./files/validate_time_assert.py
         - ./files/get_expected.sh
         - ./files/clear_objs.sh
+        - ./files/scp_and_write_data.py
+        - ./files/rsync_command.sh
 
     - name: "copy experiment query files to build directory"
       copy:

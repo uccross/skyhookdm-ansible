@@ -1,6 +1,13 @@
 # -------------------------------------------------------- #
 # EXPERIMENT PRELIMINARIES
 
+# DROP CACHES BEFORE WRITING!!!
+- name: drop all osd caches
+  shell: |
+    ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+  with_inventory_hostnames:
+    - osds
+
 - name: __experiment__ environment setup
   shell: |
     # cd into the skyhook-ceph build dir
@@ -9,7 +16,13 @@
     # copy data and untar
     #wget "{{ data_url }}/{{ tar_file_name }}" ;
     #tar -xzvf {{ tar_file_name }} -C . ;
-    su - {{ this_user }} -c 'scp -o StrictHostKeyChecking=no -r "kat@128.105.144.251:/mnt/sda4/arity3datasets/flatflex/{{ tar_dir }}" /mnt/{{ format_secondary_device }}/' ;
+    #su - {{ this_user }} -c 'scp -o StrictHostKeyChecking=no -r "kat@128.105.144.251:/mnt/sda4/arity3datasets/flatflex/{{ tar_dir }}" /mnt/{{ format_secondary_device }}/' ;
+    python scp_and_write_data.py {{ this_user }} \
+                                 {{ data_node_addr }} \
+                                 {{ data_path }} \
+                                 {{ data_dir }} \
+                                 {{ format_secondary_device }} \
+                                 {{ pool_name }} ;
 
     # get expected results files
     bash get_expected.sh {{ test_id }} ;
@@ -28,13 +41,6 @@
 
 # -------------------------------------------------------- #
 # WRITE THE TEST DATA TO CEPH
-
-# DROP CACHES BEFORE WRITING!!!
-- name: drop all osd caches
-  shell: |
-    ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
-  with_inventory_hostnames:
-    - osds
 
 # WRITE TO CEPH
 - name: __experiment__ write test data to ceph

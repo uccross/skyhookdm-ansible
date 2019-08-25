@@ -28,10 +28,9 @@
     project_cols0: "att0"
     data_schema0: "\"0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
 
-    curr_datetime:    "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    data_url:         "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/"
-    tar_file_name:    "fbxrows-arity3-1mb-100objs.tar.gz"
-    tar_dir:          "fbxrows-arity3-1mb-100objs"
+    data_node_addr:   "128.105.144.251"
+    data_path:        "/mnt/sda4/arity3datasets/flatflex/"
+    data_dir:         "fbxrows-arity3-1mb-100objs"
     data_file_prefix: "fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.testdata.*"
 
   # ============================= #
@@ -60,13 +59,12 @@
 
     select_preds0: "\"att0,leq,10;\""
     project_cols0: "att0"
-    data_schema0: "\"0 7 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
+    data_schema0: "\"0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
 
-    curr_datetime:    "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    data_url:         "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/"
-    tar_file_name:    "fburows-arity3-1mb-100objs.tar.gz"
-    tar_dir:          "fburows-arity3-1mb-100objs"
-    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.{{ tar_dir }}.*"
+    data_node_addr:   "128.105.144.251"
+    data_path:        "/mnt/sda4/arity3datasets/fburows/"
+    data_dir:         "fburows-arity3-1mb-100objs"
+    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.{{ data_dir }}.*"
 
   # ============================= #
   tasks:
@@ -96,11 +94,10 @@
     project_cols0: "att0"
     data_schema0: "\"0 7 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
 
-    curr_datetime:    "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
-    data_url:         "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/"
-    tar_file_name:    "fbucols-arity3-1mb-100objs.tar.gz"
+    data_node_addr:   "128.105.144.251"
+    data_path:        "/mnt/sda4/arity3datasets/fburows/"
     tar_dir:          "fbucols-arity3-1mb-100objs"
-    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_COL.{{ tar_dir }}.*"
+    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_COL.{{ data_dir }}.*"
 
   # ============================= #
   tasks:
