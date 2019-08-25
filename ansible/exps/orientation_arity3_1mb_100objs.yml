@@ -37,71 +37,71 @@
   tasks:
   - import_tasks: exp_helper_selectivity.yml
 
-# ------------------------------------- #
-# EXPERIMENT : FBU Rows 
-#              arity3 100 x 1mb objects
-# ------------------------------------- #
-- hosts: clients
-  # ============================= #
-  vars_files:
-    - ../vars/install_vars_luminous_sda4.yml
-  vars:
-    local_home: "{{ lookup('env','HOME') }}"
-    this_user:  "{{ lookup('env','USER') }}"
-
-    # input vars
-    num_objs:         100
-    format_device:    sda4
-    pool_name:        test_exps
-    num_col_per_cols: 4 
-    test_id:          orientations_fburows_arity3_1mb_100objs
-    use_cls:          true
-
-    select_preds0: "\"att0,leq,10;\""
-    project_cols0: "att0"
-    data_schema0: "\"0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
-
-    data_node_addr:   "128.105.144.251"
-    data_path:        "/mnt/sda4/arity3datasets/fburows/"
-    data_dir:         "fburows-arity3-1mb-100objs"
-    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.{{ data_dir }}.*"
-
-  # ============================= #
-  tasks:
-  - import_tasks: exp_helper_selectivity.yml
-
-# ------------------------------------- #
-# EXPERIMENT : FBU Cols 
-#              arity3 100 x 1mb objects
-# ------------------------------------- #
-- hosts: clients
-  # ============================= #
-  vars_files:
-    - ../vars/install_vars_luminous_sda4.yml
-  vars:
-    local_home: "{{ lookup('env','HOME') }}"
-    this_user:  "{{ lookup('env','USER') }}"
-
-    # input vars
-    num_objs:         100
-    format_device:    sda4
-    pool_name:        test_exps
-    num_col_per_cols: 4 
-    test_id:          orientations_fbucols_arity3_1mb_100objs
-    use_cls:          true
-
-    select_preds0: "\"att0,leq,10;\""
-    project_cols0: "att0"
-    data_schema0: "\"0 7 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
-
-    data_node_addr:   "128.105.144.251"
-    data_path:        "/mnt/sda4/arity3datasets/fburows/"
-    tar_dir:          "fbucols-arity3-1mb-100objs"
-    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_COL.{{ data_dir }}.*"
-
-  # ============================= #
-  tasks:
-  - import_tasks: exp_helper_selectivity.yml
+    ## ------------------------------------- #
+    ## EXPERIMENT : FBU Rows 
+    ##              arity3 100 x 1mb objects
+    ## ------------------------------------- #
+    #- hosts: clients
+    #  # ============================= #
+    #  vars_files:
+    #    - ../vars/install_vars_luminous_sda4.yml
+    #  vars:
+    #    local_home: "{{ lookup('env','HOME') }}"
+    #    this_user:  "{{ lookup('env','USER') }}"
+    #
+    #    # input vars
+    #    num_objs:         100
+    #    format_device:    sda4
+    #    pool_name:        test_exps
+    #    num_col_per_cols: 4 
+    #    test_id:          orientations_fburows_arity3_1mb_100objs
+    #    use_cls:          true
+    #
+    #    select_preds0: "\"att0,leq,10;\""
+    #    project_cols0: "att0"
+    #    data_schema0: "\"0 8 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
+    #
+    #    data_node_addr:   "128.105.144.251"
+    #    data_path:        "/mnt/sda4/arity3datasets/fburows/"
+    #    data_dir:         "fburows-arity3-1mb-100objs"
+    #    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.{{ data_dir }}.*"
+    #
+    #  # ============================= #
+    #  tasks:
+    #  - import_tasks: exp_helper_selectivity.yml
+    #
+    ## ------------------------------------- #
+    ## EXPERIMENT : FBU Cols 
+    ##              arity3 100 x 1mb objects
+    ## ------------------------------------- #
+    #- hosts: clients
+    #  # ============================= #
+    #  vars_files:
+    #    - ../vars/install_vars_luminous_sda4.yml
+    #  vars:
+    #    local_home: "{{ lookup('env','HOME') }}"
+    #    this_user:  "{{ lookup('env','USER') }}"
+    #
+    #    # input vars
+    #    num_objs:         100
+    #    format_device:    sda4
+    #    pool_name:        test_exps
+    #    num_col_per_cols: 4 
+    #    test_id:          orientations_fbucols_arity3_1mb_100objs
+    #    use_cls:          true
+    #
+    #    select_preds0: "\"att0,leq,10;\""
+    #    project_cols0: "att0"
+    #    data_schema0: "\"0 7 0 0 ATT0 ; 1 12 0 0 ATT1 ; 2 15 0 0 ATT2 ;\""
+    #
+    #    data_node_addr:   "128.105.144.251"
+    #    data_path:        "/mnt/sda4/arity3datasets/fburows/"
+    #    tar_dir:          "fbucols-arity3-1mb-100objs"
+    #    data_file_prefix: "skyhook.SFT_FLATBUF_UNION_COL.{{ data_dir }}.*"
+    #
+    #  # ============================= #
+    #  tasks:
+    #  - import_tasks: exp_helper_selectivity.yml
 
 # ------------------------------------- #
 # EXPERIMENT : FBX Rows 

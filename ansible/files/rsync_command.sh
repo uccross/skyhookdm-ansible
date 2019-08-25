@@ -1,2 +1,3 @@
 #!/bin/bash
-rsync $1@128.105.144.251:$2/'*'
+ssh-keyscan $2 >> ~/.ssh/known_hosts ;
+su - $1 -c "rsync $1@$2:$3/'*'" ;

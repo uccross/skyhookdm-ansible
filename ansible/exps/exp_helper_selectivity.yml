@@ -14,57 +14,47 @@
     cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
 
     # copy data and untar
-    #wget "{{ data_url }}/{{ tar_file_name }}" ;
-    #tar -xzvf {{ tar_file_name }} -C . ;
-    #su - {{ this_user }} -c 'scp -o StrictHostKeyChecking=no -r "kat@128.105.144.251:/mnt/sda4/arity3datasets/flatflex/{{ tar_dir }}" /mnt/{{ format_secondary_device }}/' ;
-    python scp_and_write_data.py {{ this_user }} \
-                                 {{ data_node_addr }} \
-                                 {{ data_path }} \
-                                 {{ data_dir }} \
-                                 {{ format_secondary_device }} \
-                                 {{ pool_name }} ;
+    python scp_and_write_data.py \
+                 {{ this_user }} \
+                 {{ data_node_addr }} \
+                 {{ data_path }} \
+                 {{ data_dir }} \
+                 {{ format_secondary_device }} \
+                 {{ pool_name }} ;
 
-    # get expected results files
-    bash get_expected.sh {{ test_id }} ;
+                 #    # get expected results files
+                 #    bash get_expected.sh {{ test_id }} ;
+                 #
+                 #    # compile the test driver
+                 #    make -j12 cls_tabular run-query ;
+                 #
+                 #    # make the test pool
+                 #    ceph osd pool delete {{ pool_name }} ;
+                 #    rados mkpool {{ pool_name }} ;
+                 #    ceph osd pool set {{ pool_name }} size 1 ;
+                 #    ceph osd pool set {{ pool_name }} pg_num 128 ;
+                 #
+                 #    # make sure no objects exist in the pool
+                 #    bash clear_objs.sh {{ pool_name }} ;
 
-    # compile the test driver
-    make -j12 cls_tabular run-query ;
-
-    # make the test pool
-    ceph osd pool delete {{ pool_name }} ;
-    rados mkpool {{ pool_name }} ;
-    ceph osd pool set {{ pool_name }} size 1 ;
-    ceph osd pool set {{ pool_name }} pg_num 128 ;
-
-    # make sure no objects exist in the pool
-    bash clear_objs.sh {{ pool_name }} ;
-
-# -------------------------------------------------------- #
-# WRITE THE TEST DATA TO CEPH
-
-# WRITE TO CEPH
-#- name: __experiment__ write test data to ceph
-#  shell: |
-#    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-#    yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} "/mnt/{{ format_secondary_device }}/{{ tar_dir }}/{{ data_file_prefix }}" ;
 
 # -------------------------------------------------------- #
 # RUN TESTS:
 
-#######################################################
-# Q0 : selectivity att0 1%
-- name: __experiment__ Q0 selectivity att0 1-percent
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
-        bash "PRED_QUERY.sh" \
-              {{ num_objs }} \
-              {{ pool_name }} \
-             "./{{ test_id }}_q0_match.txt" \
-             "./{{ test_id }}_q0_time.txt" \
-             {{ select_preds0 }} \
-             {{ project_cols0 }} \
-             {{ data_schema0 }} \
-             {{ use_cls }};
+    ########################################################
+    ## Q0 : selectivity att0 1%
+    #- name: __experiment__ Q0 selectivity att0 1-percent
+    #  shell: |
+    #    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    #        bash "PRED_QUERY.sh" \
+    #              {{ num_objs }} \
+    #              {{ pool_name }} \
+    #             "./{{ test_id }}_q0_match.txt" \
+    #             "./{{ test_id }}_q0_time.txt" \
+    #             {{ select_preds0 }} \
+    #             {{ project_cols0 }} \
+    #             {{ data_schema0 }} \
+    #             {{ use_cls }};
 
 #- name: __experiment__ Q0 validate results match
 #  shell: |
