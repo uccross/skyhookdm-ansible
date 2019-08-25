@@ -25,17 +25,14 @@ for f in remote_files_list :
   # scp one object file at a time into secondary storage on local
   cmd0 = "su - " + this_user + " -c 'scp -o StrictHostKeyChecking=no -r " + \
              this_user + "@" + data_node_addr + ":" + data_path + "/" + \
-             data_dir +" /mnt/" + format_secondary_device + "/'"
+             data_dir + "/" + f + " /mnt/" + format_secondary_device + "/'"
 
   # load object file into ceph
   cmd1 = "yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh " +  \
-         pool_name + " /mnt/" + format_secondary_device + "/" +  \
-         data_dir + "/" + f
+         pool_name + " /mnt/" + format_secondary_device + "/" + f
 
   # delete the object file from local
-  cmd2 = "rm -rf /mnt/" + format_secondary_device + "/" + \
-         data_dir + "/" + f
-
+  cmd2 = "rm -rf /mnt/" + format_secondary_device + "/" + f
 
   print cmd0
   print cmd1
