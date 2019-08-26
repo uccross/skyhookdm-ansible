@@ -27,7 +27,10 @@ numobjs                 = int( sys.argv[9] )
 # generate remote files list bc rsync isn't working well with ansible
 remote_files_list = []
 for i in range( 0, numobjs ) :
-  remote_files_list.append( data_file_prefix + str(i) + data_file_suffix )
+  if( data_file_suffix == "NONE" ) :
+    remote_files_list.append( data_file_prefix + str(i) )
+  else :
+    remote_files_list.append( data_file_prefix + str(i) + data_file_suffix )
 
 
 obj_counter=0
