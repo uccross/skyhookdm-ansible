@@ -6,7 +6,7 @@
 
 # ------------------------------------- #
 # EXPERIMENT : FBX Rows 
-#              arity3 100 x 1mb objects
+#              arity3 100 x 10mb objects
 # ------------------------------------- #
 - hosts: clients
   # ============================= #
@@ -21,7 +21,7 @@
     format_device:    sda4
     pool_name:        test_exps
     num_col_per_cols: 4 
-    test_id:          orientations_fbxrows_arity3_1mb_100objs
+    test_id:          orientations_fbxrows_arity3_10mb_100objs
     use_cls:          true
 
     select_preds0: "\"att0,leq,10;\""
@@ -30,8 +30,8 @@
 
     data_node_addr:   "128.105.144.251"
     data_path:        "/mnt/sda4/arity3datasets/flatflex/"
-    data_dir:         "fbxrows-arity3-1mb-100objs"
-    data_file_prefix: "fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.testdata."
+    data_dir:         "fbxrows-arity3-10mb-100objs"
+    data_file_prefix: "fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.{{ data_dir }}."
     data_file_suffix: ".1-1"
   # ============================= #
   tasks:
@@ -39,7 +39,7 @@
 
 # ------------------------------------- #
 # EXPERIMENT : FBU Rows 
-#              arity3 100 x 1mb objects
+#              arity3 100 x 10mb objects
 # ------------------------------------- #
 - hosts: clients
   # ============================= #
@@ -54,7 +54,7 @@
     format_device:    sda4
     pool_name:        test_exps
     num_col_per_cols: 4 
-    test_id:          orientations_fburows_arity3_1mb_100objs
+    test_id:          orientations_fburows_arity3_10mb_100objs
     use_cls:          true
 
     select_preds0: "\"att0,leq,10;\""
@@ -63,7 +63,7 @@
 
     data_node_addr:   "128.105.144.251"
     data_path:        "/mnt/sda4/arity3datasets/fburows/"
-    data_dir:         "fburows-arity3-1mb-100objs"
+    data_dir:         "fburows-arity3-10mb-100objs"
     data_file_prefix: "skyhook.SFT_FLATBUF_UNION_ROW.{{ data_dir }}."
     data_file_suffix: "NONE"
   # ============================= #
@@ -72,7 +72,7 @@
 
 # ------------------------------------- #
 # EXPERIMENT : FBU Cols 
-#              arity3 100 x 1mb objects
+#              arity3 100 x 10mb objects
 # ------------------------------------- #
 - hosts: clients
   # ============================= #
@@ -87,7 +87,7 @@
     format_device:    sda4
     pool_name:        test_exps
     num_col_per_cols: 4 
-    test_id:          orientations_fbucols4_arity3_1mb_100objs
+    test_id:          orientations_fbucols4_arity3_10mb_100objs
     use_cls:          true
 
     select_preds0: "\"att0,leq,10;\""
@@ -96,7 +96,7 @@
 
     data_node_addr:   "128.105.144.251"
     data_path:        "/mnt/sda4/arity3datasets/fbucols/"
-    data_dir:         "fbucols4-arity3-1mb-100objs"
+    data_dir:         "fbucols4-arity3-10mb-100objs"
     data_file_prefix: "skyhook.SFT_FLATBUF_UNION_COL.{{ data_dir }}."
     data_file_suffix: "NONE"
   # ============================= #
