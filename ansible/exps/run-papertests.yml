@@ -1,11 +1,17 @@
 # e.g. ansible-playbook -K -b exps/run-papertests.yml -vvvv --extra-vars "data_file=params/raw_1mb.yml" ;
 
+# https://users.soe.ucsc.edu/~kdahlgren/pdsw19/skyhook.SFT_FLATBUF_UNION_COL.obj.0
+# https://users.soe.ucsc.edu/~kdahlgren/pdsw19/skyhook.SFT_FLATBUF_UNION_ROW.obj.0
+# https://users.soe.ucsc.edu/~kdahlgren/pdsw19/fbmeta.Skyhook.v2.SFT_FLATBUF_FLEX_ROW.arity1_paper_exps.0.1-1
+# https://users.soe.ucsc.edu/~kdahlgren/pdsw19/concat-data.txt
+# https://users.soe.ucsc.edu/~kdahlgren/pdsw19/separate-data.txt
+
 ---
-- name: run setup_playbook to setup ceph cluster
-  import_playbook: ../setup_playbook.yml
+#- name: run setup_playbook to setup ceph cluster
+#  import_playbook: ../setup_playbook.yml
 
 # ------------------------------------- #
-# EXPERIMENT : raw 1mb, sum
+# EXPERIMENT : concat-data, sum
 # ------------------------------------- #
 - hosts: clients
 
@@ -13,18 +19,18 @@
   vars:
     # input vars
     format_device: sda4
-    data_filename: dataset_case1_1mb.txt
-    test_id:       raw_1mb
+    data_filename: concat-data.txt
+    test_id:       concat-data-sum
     pool_name:     paper_exps
     test_type:     0
-    obj_name:      test0
+    obj_name:      {{ test_id }}
     optype:        sum
     driver_name:   run-papertests
 
     # derived vars
     curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
     result_dir_path: "./res_{{ test_id }}"
-    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/testdata/{{ data_filename }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/"
 
   # ============================= #
   tasks:
@@ -53,4 +59,159 @@
         ceph osd pool set {{ pool_name }} size 1 ;
 
         # run the test
-        bin/run-papertests {{ data_filename }} {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} ;
+        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+
+# ------------------------------------- #
+# EXPERIMENT : concat-data, randomsearch
+# ------------------------------------- #
+- hosts: clients
+
+  # ============================= #
+  vars:
+    # input vars
+    format_device: sda4
+    data_filename: concat-data.txt
+    test_id:       concat-data-randomsearch
+    pool_name:     paper_exps
+    test_type:     0
+    obj_name:      {{ test_id }}
+    optype:        randomsearch
+    driver_name:   run-papertests
+
+    # derived vars
+    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+    result_dir_path: "./res_{{ test_id }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/"
+
+  # ============================= #
+  tasks:
+    - name: drop all osd caches
+      shell: |
+        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+      with_inventory_hostnames:
+        - osds
+
+    - name: __experiment__ raw 1mb
+      shell: |
+        # cd into the skyhook-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
+        # copy data
+        wget {{ data_url }} ;
+
+        # make results dir
+        mkdir {{ result_dir_name  }} ;
+
+        # compile the test driver
+        make -j12 {{ driver_name }} ;
+
+        # make the test pool
+        rados mkpool {{ pool_name }} ;
+        ceph osd pool set {{ pool_name }} size 1 ;
+
+        # run the test
+        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+
+# ------------------------------------- #
+# EXPERIMENT : separate-data, sum
+# ------------------------------------- #
+- hosts: clients
+
+  # ============================= #
+  vars:
+    # input vars
+    format_device: sda4
+    data_filename: separate-data.txt
+    test_id:       separate-data-sum
+    pool_name:     paper_exps
+    test_type:     0
+    obj_name:      {{ test_id }}
+    optype:        sum
+    driver_name:   run-papertests
+
+    # derived vars
+    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+    result_dir_path: "./res_{{ test_id }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/"
+
+  # ============================= #
+  tasks:
+    - name: drop all osd caches
+      shell: |
+        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+      with_inventory_hostnames:
+        - osds
+
+    - name: __experiment__ raw 1mb
+      shell: |
+        # cd into the skyhook-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
+        # copy data
+        wget {{ data_url }} ;
+
+        # make results dir
+        mkdir {{ result_dir_name  }} ;
+
+        # compile the test driver
+        make -j12 {{ driver_name }} ;
+
+        # make the test pool
+        rados mkpool {{ pool_name }} ;
+        ceph osd pool set {{ pool_name }} size 1 ;
+
+        # run the test
+        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+
+
+# ------------------------------------- #
+# EXPERIMENT : separate-data, randomsearch
+# ------------------------------------- #
+- hosts: clients
+
+  # ============================= #
+  vars:
+    # input vars
+    format_device: sda4
+    data_filename: separate-data.txt
+    test_id:       separate-data-randomsearch
+    pool_name:     paper_exps
+    test_type:     0
+    obj_name:      {{ test_id }}
+    optype:        sum
+    driver_name:   run-papertests
+
+    # derived vars
+    curr_datetime:   "{{ lookup('pipe','date +%Y%m%d_%H%M%S') }}"
+    result_dir_path: "./res_{{ test_id }}"
+    data_url:        "https://users.soe.ucsc.edu/~kdahlgren/pdsw19/"
+
+  # ============================= #
+  tasks:
+    - name: drop all osd caches
+      shell: |
+        ssh {{ item }} "echo 1 | sudo tee /proc/sys/vm/drop_caches" ;
+      with_inventory_hostnames:
+        - osds
+
+    - name: __experiment__ raw 1mb
+      shell: |
+        # cd into the skyhook-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+
+        # copy data
+        wget {{ data_url }} ;
+
+        # make results dir
+        mkdir {{ result_dir_name  }} ;
+
+        # compile the test driver
+        make -j12 {{ driver_name }} ;
+
+        # make the test pool
+        rados mkpool {{ pool_name }} ;
+        ceph osd pool set {{ pool_name }} size 1 ;
+
+        # run the test
+        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+

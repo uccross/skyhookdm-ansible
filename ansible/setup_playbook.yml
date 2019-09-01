@@ -54,6 +54,7 @@
         - ./files/rsync_command.sh
         - ./files/rados_put.sh
         - ./files/rados-store-glob.sh
+        - ./files/run-papertests-driver.sh
 
     - name: "copy experiment query files to build directory"
       copy:
