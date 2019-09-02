@@ -59,7 +59,7 @@
         ceph osd pool set {{ pool_name }} size 1 ;
 
         # run the test
-        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+        time bash run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
 
 # ------------------------------------- #
 # EXPERIMENT : concat-data, randomsearch
@@ -110,7 +110,7 @@
         ceph osd pool set {{ pool_name }} size 1 ;
 
         # run the test
-        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+        time bash run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
 
 # ------------------------------------- #
 # EXPERIMENT : separate-data, sum
@@ -161,7 +161,7 @@
         ceph osd pool set {{ pool_name }} size 1 ;
 
         # run the test
-        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+        time bash run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
 
 
 # ------------------------------------- #
@@ -213,5 +213,5 @@
         ceph osd pool set {{ pool_name }} size 1 ;
 
         # run the test
-        time run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
+        time bash run-papertests-driver.sh {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > "res_{{ obj_name }}_time.txt" ;
 
