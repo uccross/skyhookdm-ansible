@@ -161,7 +161,7 @@
 #    # -------------------------------------------------------- #
 #    - name: __experiment__ Q1 validate time asserts fbucols_4per
 #      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 #        python validate_time_assert.py \
 #               "./{{ test_id0_1mb }}_q1_time.txt" \
 #               "./{{ test_id0_10mb }}_q1_time.txt"  ;
@@ -172,7 +172,7 @@
 #    # -------------------------------------------------------- #
 #    - name: __experiment__ Q2 validate time asserts fbucols_4per
 #      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 #        python validate_time_assert.py \
 #               "./{{ test_id0_1mb }}_q2_time.txt" \
 #               "./{{ test_id0_10mb }}_q2_time.txt"  ;
@@ -183,7 +183,7 @@
 #    # -------------------------------------------------------- #
 #    - name: __experiment__ Q3 validate time asserts fbucols_4per
 #      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 #        python validate_time_assert.py \
 #               "./{{ test_id0_1mb }}_q3_time.txt" \
 #               "./{{ test_id0_10mb }}_q3_time.txt"  ;
@@ -194,7 +194,7 @@
 #    # -------------------------------------------------------- #
 #    - name: __experiment__ Q4 validate time asserts fbucols_4per
 #      shell: |
-#        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 #        python validate_time_assert.py \
 #               "./{{ test_id0_1mb }}_q4_time.txt" \
 #               "./{{ test_id0_10mb }}_q4_time.txt"  ;

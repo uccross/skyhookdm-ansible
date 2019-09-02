@@ -17,31 +17,31 @@
 - name: "clone skyhook repo"
   shell: |
     cd "/mnt/{{ format_device }}" ;
-    git clone https://github.com/uccross/skyhook-ceph.git ;
+    git clone https://github.com/uccross/skyhookdm-ceph.git
 
 - name: "setup skyhook repo"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
     git checkout {{ skyhook_branch }} ;
 
 - name: "running install-deps"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
     ./install-deps.sh ;
 
 - name: "running do_cmake"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
     ./do_cmake.sh ;
 
 - name: "make run-query"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     make cls_tabular ;
 
 - name: "installing tabular so lib"
   shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhook-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
     cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
     sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
     sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;

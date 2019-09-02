@@ -10,24 +10,24 @@
 
 - name: __experiment__ environment setup 0
   shell: |
-    # cd into the skyhook-ceph build dir
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    # cd into the skyhookdm-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
     # make sure no objects exist in the pool
     bash clear_objs.sh {{ pool_name }} ;
 
     #- name: __experiment__ environment setup 1
     #  shell: |
-    #    # cd into the skyhook-ceph build dir
-    #    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    #    # cd into the skyhookdm-ceph build dir
+    #    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     #
     #    ceph osd pool delete {{ pool_name }} ;
     #    ceph osd pool delete {{ pool_name }} {{ pool_name }} --yes-i-really-mean-it ;
 
 - name: __experiment__ environment setup 2
   shell: |
-    # cd into the skyhook-ceph build dir
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    # cd into the skyhookdm-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
     # make the test pool
     rados mkpool {{ pool_name }} ;
@@ -36,8 +36,8 @@
 
 - name: __experiment__ environment setup 3
   shell: |
-    # cd into the skyhook-ceph build dir
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    # cd into the skyhookdm-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
     # copy data and untar
     python scp_and_write_data.py \
@@ -53,8 +53,8 @@
 
 - name: __experiment__ environment setup 4
   shell: |
-    # cd into the skyhook-ceph build dir
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    # cd into the skyhookdm-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
     # compile the test driver
     make -j12 cls_tabular run-query ;
@@ -66,7 +66,7 @@
 ## Q0 : selectivity att0 1%
 - name: __experiment__ Q0 selectivity att0 1-percent
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
         bash "PRED_QUERY.sh" \
               {{ num_objs }} \
               {{ pool_name }} \
@@ -79,7 +79,7 @@
 
 #- name: __experiment__ Q0 validate results match
 #  shell: |
-#    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 #    python validate_match.py \
 #           "./{{ test_id }}_q0_match.txt" \
 #           "./expected_{{ test_id }}_q0_match.txt"  ;

@@ -3,8 +3,8 @@
 
 - name: __experiment__ environment setup
   shell: |
-    # cd into the skyhook-ceph build dir
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    # cd into the skyhookdm-ceph build dir
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
     # copy data
     wget {{ data_url }} ;
@@ -37,7 +37,7 @@
 # WRITE TO CEPH
 - name: __experiment__ write test data to ceph
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     yes | PATH=$PATH:bin ../src/progly/rados-store-glob.sh {{ pool_name }} {{ data_filename }} ;
 
 # -------------------------------------------------------- #
@@ -47,7 +47,7 @@
 # Q1 : select all
 - name: __experiment__ Q1
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     bash "SELECT_ALL.sh" \
           {{ num_objs }} \
           {{ pool_name }} \
@@ -56,7 +56,7 @@
 
 - name: __experiment__ Q1 validate results match
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     python validate_match.py \
            "./{{ test_id }}_q1_match.txt" \
            "./expected_{{ test_id }}_q1_match.txt"  ;
@@ -66,7 +66,7 @@
 # Q2 : select all with predicates
 - name: __experiment__ Q2
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     bash "PRED_QUERY.sh" \
           {{ num_objs }} \
           {{ pool_name }} \
@@ -78,7 +78,7 @@
 
 - name: __experiment__ Q2 validate results match
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     python validate_match.py \
            "./{{ test_id }}_q2_match.txt" \
            "./expected_{{ test_id }}_q2_match.txt"  ;
@@ -88,7 +88,7 @@
 # Q3 : select some with predicates
 - name: __experiment__ Q3
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     bash "PRED_QUERY.sh" \
           {{ num_objs }} \
           {{ pool_name }} \
@@ -100,7 +100,7 @@
 
 - name: __experiment__ Q3 validate results match
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     python validate_match.py \
            "./{{ test_id }}_q3_match.txt" \
            "./expected_{{ test_id }}_q3_match.txt"  ;
@@ -110,7 +110,7 @@
 # Q4 : sum
 - name: __experiment__ Q4
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     bash "AGG_QUERY.sh" \
           {{ num_objs }} \
           {{ pool_name }} \
@@ -122,7 +122,7 @@
 
 - name: __experiment__ Q4 validate results match
   shell: |
-    cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     python validate_match.py \
            "./{{ test_id }}_q4_match.txt" \
            "./expected_{{ test_id }}_q4_match.txt"  ;
