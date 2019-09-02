@@ -42,8 +42,8 @@
 
     - name: "__experiment__ {{ test_id }}"
       shell: |
-        # cd into the skyhook-ceph build dir
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+        # cd into the skyhookdm-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
         # copy data
         wget {{ data_url }} ;
@@ -52,7 +52,7 @@
         mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
-        make -j12 {{ driver_name }} ;
+        make -j12 {{ driver_name }} run-query ;
 
         # make the test pool
         rados mkpool {{ pool_name }} ;
@@ -93,8 +93,8 @@
 
     - name: "__experiment__ {{ test_id }}"
       shell: |
-        # cd into the skyhook-ceph build dir
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+        # cd into the skyhookdm-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
         # copy data
         wget {{ data_url }} ;
@@ -103,7 +103,7 @@
         mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
-        make -j12 {{ driver_name }} ;
+        make -j12 {{ driver_name }} run-query ;
 
         # make the test pool
         rados mkpool {{ pool_name }} ;
@@ -144,8 +144,8 @@
 
     - name: "__experiment__ {{ test_id }}"
       shell: |
-        # cd into the skyhook-ceph build dir
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+        # cd into the skyhookdm-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
         # copy data
         wget {{ data_url }} ;
@@ -154,7 +154,7 @@
         mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
-        make -j12 {{ driver_name }} ;
+        make -j12 {{ driver_name }} run-query ;
 
         # make the test pool
         rados mkpool {{ pool_name }} ;
@@ -196,8 +196,8 @@
 
     - name: "__experiment__ {{ test_id }}"
       shell: |
-        # cd into the skyhook-ceph build dir
-        cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
+        # cd into the skyhookdm-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
 
         # copy data
         wget {{ data_url }} ;
@@ -206,7 +206,7 @@
         mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
-        make -j12 {{ driver_name }} ;
+        make -j12 {{ driver_name }} run-query ;
 
         # make the test pool
         rados mkpool {{ pool_name }} ;

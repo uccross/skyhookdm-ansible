@@ -69,3 +69,17 @@
     - name: "running format device"
       shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
       ignore_errors: yes
+
+# change to specified branch
+- hosts: clients
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - ./vars/install_vars_luminous_sda4.yml
+  tasks:
+    - name: "checkout specified branch"
+      shell: |
+        # cd into the skyhookdm-ceph build dir
+        cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
+        git checkout {{ branch }} ;
