@@ -23,7 +23,7 @@
     test_id:       concat-data-sum
     pool_name:     paper_exps
     test_type:     0
-    obj_name:      {{ test_id }}
+    obj_name:      "{{ test_id }}"
     optype:        sum
     driver_name:   run-papertests
 
@@ -40,7 +40,7 @@
       with_inventory_hostnames:
         - osds
 
-    - name: __experiment__ raw 1mb
+    - name: "__experiment__ {{ test_id }}"
       shell: |
         # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
@@ -49,7 +49,7 @@
         wget {{ data_url }} ;
 
         # make results dir
-        mkdir {{ result_dir_name  }} ;
+        mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
         make -j12 {{ driver_name }} ;
@@ -74,7 +74,7 @@
     test_id:       concat-data-randomsearch
     pool_name:     paper_exps
     test_type:     0
-    obj_name:      {{ test_id }}
+    obj_name:      "{{ test_id }}"
     optype:        randomsearch
     driver_name:   run-papertests
 
@@ -91,7 +91,7 @@
       with_inventory_hostnames:
         - osds
 
-    - name: __experiment__ raw 1mb
+    - name: "__experiment__ {{ test_id }}"
       shell: |
         # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
@@ -100,7 +100,7 @@
         wget {{ data_url }} ;
 
         # make results dir
-        mkdir {{ result_dir_name  }} ;
+        mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
         make -j12 {{ driver_name }} ;
@@ -125,7 +125,7 @@
     test_id:       separate-data-sum
     pool_name:     paper_exps
     test_type:     0
-    obj_name:      {{ test_id }}
+    obj_name:      "{{ test_id }}"
     optype:        sum
     driver_name:   run-papertests
 
@@ -142,7 +142,7 @@
       with_inventory_hostnames:
         - osds
 
-    - name: __experiment__ raw 1mb
+    - name: "__experiment__ {{ test_id }}"
       shell: |
         # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
@@ -151,7 +151,7 @@
         wget {{ data_url }} ;
 
         # make results dir
-        mkdir {{ result_dir_name  }} ;
+        mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
         make -j12 {{ driver_name }} ;
@@ -177,7 +177,7 @@
     test_id:       separate-data-randomsearch
     pool_name:     paper_exps
     test_type:     0
-    obj_name:      {{ test_id }}
+    obj_name:      "{{ test_id }}"
     optype:        sum
     driver_name:   run-papertests
 
@@ -194,7 +194,7 @@
       with_inventory_hostnames:
         - osds
 
-    - name: __experiment__ raw 1mb
+    - name: "__experiment__ {{ test_id }}"
       shell: |
         # cd into the skyhook-ceph build dir
         cd "/mnt/{{ format_device }}/skyhook-ceph/build" ;
@@ -203,7 +203,7 @@
         wget {{ data_url }} ;
 
         # make results dir
-        mkdir {{ result_dir_name  }} ;
+        mkdir {{ result_dir_path  }} ;
 
         # compile the test driver
         make -j12 {{ driver_name }} ;
