@@ -1,5 +1,5 @@
 ---
 format_device: sda4 
 format_secondary_device: sdb
-skyhook_branch: skyhook-pdsw19
+skyhook_branch: skyhook-kat10
 #commit_id: 7364d64d2db4bea93b48fe3827a7fc9ee340efd7
