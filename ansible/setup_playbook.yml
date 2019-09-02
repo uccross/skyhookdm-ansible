@@ -55,6 +55,8 @@
         - ./files/rados_put.sh
         - ./files/rados-store-glob.sh
         - ./files/run-papertests-driver.sh
+        - ./files/papertests-run-query-driver.sh
+        - ./files/papertests-run-query-driver_randomsearch.sh
 
     - name: "copy experiment query files to build directory"
       copy:

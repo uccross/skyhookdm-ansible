@@ -1,11 +1,16 @@
 #!/bin/bash
 
-set -ex
+#set -ex
 
-result_dir_path=$1
+result_path=$1
 pool_name=$2
-tset_type=$3
+test_type=$3
 obj_name=$4
 optype=$5
 
-bin/run-papertests {{ result_dir_path }} {{ pool_name }} {{ test_type }} {{ obj_name }} {{ optype }} > res_$obj_name_match.txt ;
+#echo "bin/run-papertests $result_path $pool_name $test_type $obj_name $optype > res_${obj_name}_match.txt" > res_${obj_name}_time.txt ;
+#bin/run-papertests $result_path $pool_name $test_type $obj_name $optype > res_${obj_name}_match.txt ;
+
+echo "{ time bin/run-papertests $result_path $pool_name $test_type $obj_name $optype > res_${obj_name}_match.txt ; } 2>> res_${obj_name}_time.txt" >> res_${obj_name}_time.txt ;
+
+{ time bin/run-papertests $result_path $pool_name $test_type $obj_name $optype > res_${obj_name}_match.txt ; } 2>> res_${obj_name}_time.txt ;
