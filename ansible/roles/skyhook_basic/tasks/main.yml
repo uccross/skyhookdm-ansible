@@ -37,7 +37,7 @@
 - name: "make run-query"
   shell: |
     cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make cls_tabular ceph-osd librados ;
+    make -j36 cls_tabular ceph-osd librados ;
 
 # install cls tabular changes
 - name: "installing tabular so lib"
