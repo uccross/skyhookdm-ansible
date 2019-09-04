@@ -58,9 +58,9 @@
     sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
 
 # install librados changes
-- name: "installing tabular so lib"
+- name: "installing rados so lib"
   shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.1.0.0"  /usr/lib/x86_64-linux-gnu/ ;
+    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.2.0.0"  /usr/lib/x86_64-linux-gnu/ ;
     cd /usr/lib/x86_64-linux-gnu/ ;
     sudo ln -s librados.so.2.0.0 librados.so.2 ;
     sudo ln -s librados.so.2 librados.so ;
