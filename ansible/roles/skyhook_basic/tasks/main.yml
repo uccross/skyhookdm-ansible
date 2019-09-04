@@ -62,8 +62,8 @@
   shell: |
     sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.1.0.0"  /usr/lib/x86_64-linux-gnu/ ;
     cd /usr/lib/x86_64-linux-gnu/ ;
-    sudo ln -s librados.so.1.0.0 librados.so.1 ;
-    sudo ln -s librados.so.1 librados.so ;
+    sudo ln -s librados.so.2.0.0 librados.so.2 ;
+    sudo ln -s librados.so.2 librados.so ;
 
 # install ceph-osd changes
 - name: "installing ceph-osd bin"
