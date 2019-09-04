@@ -21,16 +21,16 @@
 # run install-deps, 
 # make the source code, 
 # install the generated tabular so.
-- hosts: all
-  vars:
-    local_home: "{{ lookup('env','HOME') }}"
-    this_user:  "{{ lookup('env','USER') }}"
-  vars_files:
-    - ./vars/install_vars_luminous_sda4.yml
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-  roles:
-    - skyhook_basic
+#- hosts: all
+#  vars:
+#    local_home: "{{ lookup('env','HOME') }}"
+#    this_user:  "{{ lookup('env','USER') }}"
+#  vars_files:
+#    - ./vars/install_vars_luminous_sda4.yml
+#  environment:
+#    DEBIAN_FRONTEND: noninteractive
+#  roles:
+#    - skyhook_basic
 
 # copy helper files to build diretory.
 - hosts: clients
@@ -68,6 +68,6 @@
         - ./exps/query_files/PRED_QUERY.sh
         - ./exps/query_files/AGG_QUERY.sh
 
-    - name: "running format device"
-      shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
-      ignore_errors: yes
+    #- name: "running format device"
+    #  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
+    #  ignore_errors: yes
