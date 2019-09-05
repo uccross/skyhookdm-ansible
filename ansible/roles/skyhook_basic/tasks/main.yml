@@ -39,16 +39,6 @@
     cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     make -j36 cls_tabular ;
 
-- name: "make cls_tabular"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 ceph-osd ;
-    
-- name: "make cls_tabular"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 librados ;
-
 # install cls tabular changes
 - name: "installing tabular so lib"
   shell: |
@@ -56,16 +46,3 @@
     cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
     sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
     sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
-
-# install librados changes
-- name: "installing tabular so lib"
-  shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.1.0.0"  /usr/lib/x86_64-linux-gnu/ ;
-    cd /usr/lib/x86_64-linux-gnu/ ;
-    sudo ln -s librados.so.1.0.0 librados.so.1 ;
-    sudo ln -s librados.so.1 librados.so ;
-
-# install ceph-osd changes
-- name: "installing ceph-osd bin"
-  shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/bin/ceph-osd" /usr/bin/ ;
