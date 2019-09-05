@@ -5,6 +5,7 @@
   import_playbook: lib/ceph-deploy-ansible/ansible/playbook.yml
 
 - hosts: clients
+  become: True
   tasks:
     - name: "install postgres on client0"
       become: yes
@@ -22,6 +23,7 @@
 # make the source code, 
 # install the generated tabular so.
 - hosts: all
+  become: True
   vars:
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
@@ -34,6 +36,7 @@
 
 # copy helper files to build diretory.
 - hosts: clients
+  become: True
   vars:
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
