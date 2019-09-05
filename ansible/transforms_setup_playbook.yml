@@ -1,6 +1,22 @@
 # e.g. time ansible-playbook -K -b setup_playbook.yml -vvvv ;
 
 ---
+# clone skyhook on each node, 
+# run install-deps, 
+# make the source code, 
+# install the generated tabular so.
+- hosts: all
+  become: True
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - ./vars/install_vars_luminous_sda4.yml
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  roles:
+    - skyhook_basic
+
 - name: run setup ceph cluster playbook from lib/ceph-deploy-ansible
   import_playbook: lib/ceph-deploy-ansible/ansible/playbook.yml
 
@@ -17,22 +33,6 @@
         sudo su -c "yes | apt-get install postgresql-10" ;
         sudo su -c "yes | apt-get install postgresql-server-dev-10" ;
         sudo su -c "yes | apt-get install postgresql-contrib" ;
-
-# clone skyhook on each node, 
-# run install-deps, 
-# make the source code, 
-# install the generated tabular so.
-- hosts: all
-  become: True
-  vars:
-    local_home: "{{ lookup('env','HOME') }}"
-    this_user:  "{{ lookup('env','USER') }}"
-  vars_files:
-    - ./vars/install_vars_luminous_sda4.yml
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-  roles:
-    - skyhook_basic
 
 # copy helper files to build diretory.
 - hosts: clients
