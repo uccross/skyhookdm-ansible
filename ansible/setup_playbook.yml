@@ -5,6 +5,7 @@
   import_playbook: lib/ceph-deploy-ansible/ansible/playbook.yml
 
 - hosts: clients
+  become: True
   tasks:
     - name: "install postgres on client0"
       become: yes
