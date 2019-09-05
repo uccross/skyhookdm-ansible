@@ -60,6 +60,7 @@
         - ./files/run-papertests-driver.sh
         - ./files/papertests-run-query-driver.sh
         - ./files/papertests-run-query-driver_randomsearch.sh
+        - ./files/validate_xform_res.py
 
     - name: "copy experiment query files to build directory"
       copy:
