@@ -34,15 +34,20 @@
     cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
     ./do_cmake.sh ;
 
-- name: "make cls_tabular"
+- name: "make ceph-osd"
   shell: |
     cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 cls_tabular ;
+    make -j36 ceph-osd ;
 
 - name: "make librados so lib"
   shell: |
     cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     make -j36 librados ;
+
+- name: "make cls_tabular"
+  shell: |
+    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
+    make -j36 cls_tabular ;
 
 # install cls tabular changes
 #- name: "installing tabular so lib"

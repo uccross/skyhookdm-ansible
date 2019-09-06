@@ -11,7 +11,7 @@
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
   vars_files:
-    - ./vars/install_vars_luminous_sda4.yml
+    - ./vars/install_vars_pdsw19_sda4.yml
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
@@ -41,7 +41,7 @@
     local_home: "{{ lookup('env','HOME') }}"
     this_user:  "{{ lookup('env','USER') }}"
   vars_files:
-    - ./vars/install_vars_luminous_sda4.yml
+    - ./vars/install_vars_pdsw19_sda4.yml
   tasks:
     - name: "copy experiment helper scripts to build directory"
       copy:
