@@ -40,3 +40,5 @@ with open( CLIENT_TIMES_PATH, 'r' ) as f :
 print client_duration_list
 client_avg_duration = sum( client_duration_list )/len( client_duration_list )
 print "client merge avg duration : " + str( client_avg_duration )
+
+assert avg_duration < client_avg_duration
