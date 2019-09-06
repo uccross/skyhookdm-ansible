@@ -35,10 +35,10 @@
     cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
     ./do_cmake.sh ;
 
-- name: "make ceph-osd"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 ceph-osd ;
+#- name: "make ceph-osd"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
+#    make -j36 ceph-osd ;
 
 - name: "make librados so lib"
   shell: |
