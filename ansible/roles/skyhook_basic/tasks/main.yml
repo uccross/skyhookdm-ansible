@@ -17,6 +17,7 @@
 - name: "clone skyhook repo"
   shell: |
     cd "/mnt/{{ format_device }}" ;
+    rm -rf "/mnt/{{ format_device }}/skyhookdm-ceph/" ;
     git clone https://github.com/uccross/skyhookdm-ceph.git
 
 - name: "setup skyhook repo"
