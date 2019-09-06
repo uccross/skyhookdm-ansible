@@ -18,7 +18,7 @@
     - skyhook_basic
 
 - name: run setup ceph cluster playbook from lib/ceph-deploy-ansible
-  import_playbook: lib/ceph-deploy-ansible/ansible/playbook.yml
+  import_playbook: lib-transforms/ceph-deploy-ansible/ansible/playbook.yml
 
 - hosts: clients
   become: True
