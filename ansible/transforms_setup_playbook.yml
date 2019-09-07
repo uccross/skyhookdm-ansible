@@ -62,6 +62,7 @@
         - ./files/papertests-run-query-driver_randomsearch.sh
         - ./files/validate_xform_res.py
         - ./files/rados_put_parallel.py
+        - ./files/parallel_merge.py
         - "/mnt/{{ format_device }}/skyhookdm-ceph/src/progly/katfiles/run_transform_tests.sh"
         - "/mnt/{{ format_device }}/skyhookdm-ceph/src/progly/katfiles/run_transform_tests_lineitem.sh"
 
