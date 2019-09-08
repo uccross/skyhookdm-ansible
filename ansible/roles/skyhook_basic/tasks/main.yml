@@ -10,10 +10,6 @@
   shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
   ignore_errors: yes
 
-#- name: "running format secondary device"
-#  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
-#  ignore_errors: yes
-
 - name: "clone skyhook repo"
   shell: |
     cd "/mnt/{{ format_device }}" ;
@@ -35,33 +31,15 @@
     cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
     ./do_cmake.sh ;
 
-#- name: "make ceph-osd"
-#  shell: |
-#    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-#    make -j36 ceph-osd ;
-
-- name: "make librados so lib"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 librados ;
-
 - name: "make cls_tabular"
   shell: |
     cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
     make -j36 cls_tabular ;
 
 # install cls tabular changes
-#- name: "installing tabular so lib"
-#  shell: |
-#    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-#    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-#    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
-#    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
-
-# install librados changes
-#- name: "installing rados so lib"
-#  shell: |
-#    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.2.0.0"  /usr/lib/x86_64-linux-gnu/ ;
-#    cd /usr/lib/x86_64-linux-gnu/ ;
-#    sudo ln -s librados.so.2.0.0 librados.so.2 ;
-#    sudo ln -s librados.so.2 librados.so ;
+- name: "installing tabular so lib"
+  shell: |
+    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
+    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;

@@ -1,6 +1,11 @@
 # e.g. time ansible-playbook -K -b setup_playbook.yml -vvvv ;
 
 ---
+# do the ceph vanilla install 
+# (changed to pdsw19 branch bc had issues installing mods)
+- name: run setup ceph cluster playbook from lib/ceph-deploy-ansible
+  import_playbook: lib-transforms/ceph-deploy-ansible/ansible/playbook.yml
+
 # clone skyhook on each node, 
 # run install-deps, 
 # make the source code, 
@@ -17,9 +22,7 @@
   roles:
     - skyhook_basic
 
-- name: run setup ceph cluster playbook from lib/ceph-deploy-ansible
-  import_playbook: lib-transforms/ceph-deploy-ansible/ansible/playbook.yml
-
+# install postgres on client0
 - hosts: clients
   become: True
   tasks:
