@@ -78,3 +78,15 @@
         - ./exps/query_files/SELECT_ALL.sh
         - ./exps/query_files/PRED_QUERY.sh
         - ./exps/query_files/AGG_QUERY.sh
+
+# fix owner bc running as root is annoying
+- hosts: clients
+  become: True
+  vars:
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - ./vars/install_vars_pdsw19_sda4.yml
+  tasks:
+    - name: "fixing owner of build dir"
+      shell: |
+        sudo chown -R {{ this_user }} "/mnt/{{ format_device }}/skyhookdm-ceph" ;
