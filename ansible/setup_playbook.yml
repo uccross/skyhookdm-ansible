@@ -1,4 +1,4 @@
-# e.g. time ansible-playbook setup_playbook.yml -vvvv ;
+# e.g. time ansible-playbook setup_playbook.yml --extra-vars "vars_file=./vars/default_vars.yml" ;
 
 ---
 # clone skyhook on each node, 
@@ -15,7 +15,29 @@
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
-    - skyhook_basic
+    - tasks_for_make_install
+
+# setup ceph on client
+- hosts: clients
+  become: True
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - "{{ vars_file }}"
+  roles:
+    - client_ceph
+
+# setup ceph on osds
+- hosts: osds
+  become: True
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - "{{ vars_file }}"
+  roles:
+    - osd_ceph
 
 # install postgres
 - hosts: clients
@@ -30,3 +52,15 @@
         sudo su -c "yes | apt-get install postgresql-10" ;
         sudo su -c "yes | apt-get install postgresql-server-dev-10" ;
         sudo su -c "yes | apt-get install postgresql-contrib" ;
+
+# fix owner bc running as root is annoying
+- hosts: clients
+  become: True
+  vars:
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - ./vars/install_vars_pdsw19_sda4.yml
+  tasks:
+    - name: "fixing owner of build dir"
+      shell: |
+        sudo chown -R {{ this_user }} "/mnt/{{ format_device }}/skyhookdm-ceph" ;
