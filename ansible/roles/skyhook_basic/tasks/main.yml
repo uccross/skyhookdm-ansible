@@ -1,71 +1,71 @@
-- name: "copy setup files"
-  copy:
-    src: "{{ item }}"
-    dest: "{{ local_home }}"
-    mode: '0644'
-  with_items:
-    - ./files/format-device.sh
-
-- name: "running format device"
-  shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
-  ignore_errors: yes
-
-#- name: "running format secondary device"
-#  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
+#- name: "copy setup files"
+#  copy:
+#    src: "{{ item }}"
+#    dest: "{{ local_home }}"
+#    mode: '0644'
+#  with_items:
+#    - ./files/format-device.sh
+#
+#- name: "running format device"
+#  shell: sh format-device.sh {{ this_user }} {{ format_device }} ;
 #  ignore_errors: yes
-
-- name: "clone skyhook repo"
-  shell: |
-    cd "/mnt/{{ format_device }}" ;
-    git clone https://github.com/uccross/skyhookdm-ceph.git
-
-- name: "setup skyhook repo"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
-    git checkout {{ skyhook_branch }} ;
-
-- name: "running install-deps"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
-    ./install-deps.sh ;
-
-- name: "running do_cmake"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
-    ./do_cmake.sh ;
-
-- name: "make cls_tabular"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 cls_tabular ;
-
-- name: "make cls_tabular"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 ceph-osd ;
-    
-- name: "make cls_tabular"
-  shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
-    make -j36 librados ;
-
-# install cls tabular changes
-- name: "installing tabular so lib"
-  shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
-    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
-
-# install librados changes
-- name: "installing rados so lib"
-  shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.2.0.0"  /usr/lib/x86_64-linux-gnu/ ;
-    cd /usr/lib/x86_64-linux-gnu/ ;
-    sudo ln -s librados.so.2.0.0 librados.so.2 ;
-    sudo ln -s librados.so.2 librados.so ;
-
-# install ceph-osd changes
-- name: "installing ceph-osd bin"
-  shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/bin/ceph-osd" /usr/bin/ ;
+#
+##- name: "running format secondary device"
+##  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
+##  ignore_errors: yes
+#
+#- name: "clone skyhook repo"
+#  shell: |
+#    cd "/mnt/{{ format_device }}" ;
+#    git clone https://github.com/uccross/skyhookdm-ceph.git
+#
+#- name: "setup skyhook repo"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+#    git checkout {{ skyhook_branch }} ;
+#
+#- name: "running install-deps"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+#    ./install-deps.sh ;
+#
+#- name: "running do_cmake"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+#    ./do_cmake.sh ;
+#
+#- name: "make cls_tabular"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
+#    make -j36 cls_tabular ;
+#
+#- name: "make cls_tabular"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
+#    make -j36 ceph-osd ;
+#    
+#- name: "make cls_tabular"
+#  shell: |
+#    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build" ;
+#    make -j36 librados ;
+#
+## install cls tabular changes
+#- name: "installing tabular so lib"
+#  shell: |
+#    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+#    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+#    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
+#    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
+#
+## install librados changes
+#- name: "installing rados so lib"
+#  shell: |
+#    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/librados.so.2.0.0"  /usr/lib/x86_64-linux-gnu/ ;
+#    cd /usr/lib/x86_64-linux-gnu/ ;
+#    sudo ln -s librados.so.2.0.0 librados.so.2 ;
+#    sudo ln -s librados.so.2 librados.so ;
+#
+## install ceph-osd changes
+#- name: "installing ceph-osd bin"
+#  shell: |
+#    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/bin/ceph-osd" /usr/bin/ ;

@@ -1,9 +1,23 @@
-# e.g. time ansible-playbook -K -b setup_playbook.yml -vvvv ;
+# e.g. time ansible-playbook setup_playbook.yml -vvvv ;
 
 ---
-- name: run setup ceph cluster playbook from lib/ceph-deploy-ansible
-  import_playbook: lib/ceph-deploy-ansible/ansible/playbook.yml
+# clone skyhook on each node, 
+# run install-deps, 
+# make the source code, 
+# install the generated tabular so.
+- hosts: all
+  become: True
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    this_user:  "{{ lookup('env','USER') }}"
+  vars_files:
+    - "{{ vars_file }}"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  roles:
+    - skyhook_basic
 
+# install postgres
 - hosts: clients
   become: True
   tasks:
@@ -16,60 +30,3 @@
         sudo su -c "yes | apt-get install postgresql-10" ;
         sudo su -c "yes | apt-get install postgresql-server-dev-10" ;
         sudo su -c "yes | apt-get install postgresql-contrib" ;
-
-# clone skyhook on each node, 
-# run install-deps, 
-# make the source code, 
-# install the generated tabular so.
-- hosts: all
-  become: True
-  vars:
-    local_home: "{{ lookup('env','HOME') }}"
-    this_user:  "{{ lookup('env','USER') }}"
-  vars_files:
-    - ./vars/install_vars_luminous_sda4.yml
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-  roles:
-    - skyhook_basic
-
-# copy helper files to build diretory.
-- hosts: clients
-  become: True
-  vars:
-    local_home: "{{ lookup('env','HOME') }}"
-    this_user:  "{{ lookup('env','USER') }}"
-  vars_files:
-    - ./vars/install_vars_luminous_sda4.yml
-  tasks:
-    - name: "copy experiment helper scripts to build directory"
-      copy:
-        src: "{{ item }}"
-        dest: "/mnt/{{ format_device }}/skyhookdm-ceph/build"
-        mode: '0644'
-      with_items:
-        - ./files/validate_match.py
-        - ./files/validate_time_assert.py
-        - ./files/get_expected.sh
-        - ./files/clear_objs.sh
-        - ./files/scp_and_write_data.py
-        - ./files/rsync_command.sh
-        - ./files/rados_put.sh
-        - ./files/rados-store-glob.sh
-        - ./files/run-papertests-driver.sh
-        - ./files/papertests-run-query-driver.sh
-        - ./files/papertests-run-query-driver_randomsearch.sh
-
-    - name: "copy experiment query files to build directory"
-      copy:
-        src: "{{ item }}"
-        dest: "/mnt/{{ format_device }}/skyhookdm-ceph/build"
-        mode: '0644'
-      with_items:
-        - ./exps/query_files/SELECT_ALL.sh
-        - ./exps/query_files/PRED_QUERY.sh
-        - ./exps/query_files/AGG_QUERY.sh
-
-    #- name: "running format device"
-    #  shell: sh format-device.sh {{ this_user }} {{ format_secondary_device }} ;
-    #  ignore_errors: yes
