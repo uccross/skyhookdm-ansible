@@ -59,7 +59,7 @@
   vars:
     this_user:  "{{ lookup('env','USER') }}"
   vars_files:
-    - ./vars/install_vars_pdsw19_sda4.yml
+    - "{{ vars_file }}"
   tasks:
     - name: "fixing owner of build dir"
       shell: |
