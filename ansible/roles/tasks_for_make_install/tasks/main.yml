@@ -5,7 +5,6 @@
     mode: preserve
   with_items:
     - ./files/format-device.sh
-    - ./files/set_python_path.sh
 
 - name: "formatting device"
   shell: |
