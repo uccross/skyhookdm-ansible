@@ -10,7 +10,7 @@ data_path               = sys.argv[3]
 data_dir                = sys.argv[4]
 data_file_prefix        = sys.argv[5]
 data_file_suffix        = sys.argv[6]
-format_secondary_device = sys.argv[7]
+osd_dev_name = sys.argv[7]
 pool_name               = sys.argv[8]
 numobjs                 = int( sys.argv[9] )
 
@@ -37,7 +37,7 @@ obj_counter=0
 for f in remote_files_list :
   # scp one object file at a time into secondary storage on local
   cmd0 = "su - " + this_user + " -c 'scp -o StrictHostKeyChecking=no -r " + \
-             this_user + "@" + data_node_addr + ":" + data_path + "/" + data_dir + "/" + f + " /mnt/" + format_secondary_device + "/'" + " ;"
+             this_user + "@" + data_node_addr + ":" + data_path + "/" + data_dir + "/" + f + " /mnt/" + osd_dev_name + "/'" + " ;"
   print cmd0
   os.system( cmd0 )
 
@@ -45,12 +45,12 @@ for f in remote_files_list :
   remote_files_str = subprocess.check_output(["bash", \
                                               "rados_put.sh", \
                                               pool_name, \
-                                              format_secondary_device, \
+                                              osd_dev_name, \
                                               f, \
                                               str( obj_counter )])
   obj_counter += 1
 
   # delete the object file from local
-  cmd2 = "rm -rf /mnt/" + format_secondary_device + "/" + f + " ; sleep 1 ;"
+  cmd2 = "rm -rf /mnt/" + osd_dev_name + "/" + f + " ; sleep 1 ;"
   print cmd2
   os.system( cmd2 )

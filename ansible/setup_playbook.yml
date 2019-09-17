@@ -63,4 +63,4 @@
   tasks:
     - name: "fixing owner of build dir"
       shell: |
-        sudo chown -R {{ this_user }} "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+        sudo chown -R {{ this_user }} "/mnt/{{ client_dev_name }}/skyhookdm-ceph" ;

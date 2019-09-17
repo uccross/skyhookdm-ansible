@@ -12,9 +12,9 @@
 
 - name: "wipe osd drive"
   shell: |
-    sudo wipefs -a "/dev/{{ format_secondary_device }}" ;
-    sudo mkfs -t xfs -f "/dev/{{ format_secondary_device }}" ;
-    sudo mount "/dev/{{ format_secondary_device }}" "/var/lib/ceph/osd/ceph-{{ groups['osds'].index(inventory_hostname) }}" ;
+    sudo wipefs -a "/dev/{{ osd_dev_name }}" ;
+    sudo mkfs -t xfs -f "/dev/{{ osd_dev_name }}" ;
+    sudo mount "/dev/{{ osd_dev_name }}" "/var/lib/ceph/osd/ceph-{{ groups['osds'].index(inventory_hostname) }}" ;
 
 - name: "spin up osd"
   shell: |

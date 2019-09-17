@@ -1,7 +1,0 @@
-# e.g. time ansible-playbook -K -b exps/orientation_pdsw19.yml -vvvv ;
-
----
-#- name: run 1mb 100objs experiments for fbxrow, fburows, and fbucols
-#  import_playbook: orientation_arity3_1mb_100objs.yml
-- name: run 10mb 100objs experiments for fbxrow, fburows, and fbucols
-  import_playbook: orientation_arity3_10mb_100objs.yml

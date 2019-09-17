@@ -10,35 +10,35 @@
 - name: "formatting device"
   shell: |
     cd {{ local_home }} ;
-    if df -h | grep -q sda4; then echo \"mounted, unmounting\"; sudo umount "/mnt/{{ format_device }}"; fi;
-    sudo bash format-device.sh {{ this_user }} {{ format_device }} ;
+    if df -h | grep -q sda4; then echo \"mounted, unmounting\"; sudo umount "/mnt/{{ client_dev_name }}"; fi;
+    sudo bash format-device.sh {{ this_user }} {{ client_dev_name }} ;
 
 - name: "cloning repo"
   shell: |
-    cd "/mnt/{{ format_device }}/" ;
+    cd "/mnt/{{ client_dev_name }}/" ;
     git clone https://github.com/uccross/skyhookdm-ceph.git ;
 
 - name: "checking out branch {{ skyhook_branch }}"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+    cd "/mnt/{{ client_dev_name }}/skyhookdm-ceph" ;
     git checkout {{ skyhook_branch }} ;
 
 - name: "running install deps"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+    cd "/mnt/{{ client_dev_name }}/skyhookdm-ceph" ;
     sudo ./install-deps.sh ;
 
 - name: "running do cmake"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph" ;
+    cd "/mnt/{{ client_dev_name }}/skyhookdm-ceph" ;
     ./do_cmake.sh -DCMAKE_INSTALL_PREFIX=/usr/ -DCMAKE_INSTALL_LIBDIR=/usr/lib/ ;
 
 - name: "compiling everything"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build/" ;
+    cd "/mnt/{{ client_dev_name }}/skyhookdm-ceph/build/" ;
     make -j 36 ;
 
 - name: "running make install"
   shell: |
-    cd "/mnt/{{ format_device }}/skyhookdm-ceph/build/" ;
+    cd "/mnt/{{ client_dev_name }}/skyhookdm-ceph/build/" ;
     sudo make install ;

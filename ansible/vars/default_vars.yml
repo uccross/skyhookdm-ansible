@@ -1,5 +1,5 @@
 ---
-format_device: sda4 
-format_secondary_device: sdb
+client_dev_name: sda4 
+osd_dev_name: sdb
 skyhook_branch: skyhook-pdsw19
 ceph_conf: ceph.conf_kensconf
