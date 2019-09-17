@@ -2,6 +2,9 @@
 
 [![issues](https://img.shields.io/github/issues/KDahlgren/skyhook-ansible)]()
 
+[![forks](https://img.shields.io/github/forks/KDahlgren/skyhook-ansible)]()
+
+[![stars](https://img.shields.io/github/stars/KDahlgren/skyhook-ansible)]()
 <br />
 
 # skyhook-ansible
