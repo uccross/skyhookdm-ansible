@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/KDahlgren/skyhook-ansible.svg?branch=master)](https://travis-ci.com/KDahlgren/skyhook-ansible)
 
-<a href="https://github.com/KDahlgren/skyhook-ansible/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/m/badges/shields" /></a>
+[![issues](https://img.shields.io/github/issues/KDahlgren/skyhook-ansible)]()
+
 <br />
 
 # skyhook-ansible
