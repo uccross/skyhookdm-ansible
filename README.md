@@ -1,10 +1,7 @@
 [![Build Status](https://travis-ci.com/KDahlgren/skyhook-ansible.svg?branch=master)](https://travis-ci.com/KDahlgren/skyhook-ansible)
+[![GitHub contributors](https://img.shields.io/github/contributors/KDahlgren/skyhook-ansible.svg)](https://GitHub.com/KDahlgren/skyhook-ansible/graphs/contributors/)
+[![HitCount](http://hits.dwyl.io/KDahlgren/skyhook-ansible.svg)](http://hits.dwyl.io/KDahlgren/skyhook-ansible)
 
-[![issues](https://img.shields.io/github/issues/KDahlgren/skyhook-ansible)]()
-
-[![forks](https://img.shields.io/github/forks/KDahlgren/skyhook-ansible)]()
-
-[![stars](https://img.shields.io/github/stars/KDahlgren/skyhook-ansible)]()
 <br />
 
 # skyhook-ansible
