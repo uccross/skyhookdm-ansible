@@ -1,8 +1,21 @@
- - name: "set python path"
-   lineinfile: dest=/root/.profile line='export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages' insertafter='EOF' regexp='export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages' state=present
+- name: "set python path"
+  lineinfile:
+    dest: "{{ local_home }}/.profile"
+    regexp: 'export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages'
+    state: absent
 
-- name: "source profile"
-   shell: source /root/.profile
+- name: "set python path"
+  lineinfile:
+    dest: "{{ local_home }}/.profile"
+    line: 'export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages'
+    insertafter: 'EOF'
+    regexp: 'export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages'
+    state: present
+
+- name: "source .profile"
+  shell: |
+    cd {{ local_home }} ;
+    . ~/.profile ;
 
 - name: "make /etc/ceph/ on client0"
   shell: |
