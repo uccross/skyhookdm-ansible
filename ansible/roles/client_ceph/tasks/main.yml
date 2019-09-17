@@ -9,13 +9,13 @@
     dest: "{{ local_home }}/.profile"
     line: 'export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages'
     insertafter: 'EOF'
-    regexp: 'export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/site-packages'
     state: present
 
 - name: "source .profile"
   shell: |
-    cd {{ local_home }} ;
-    . ~/.profile ;
+    . "{{ local_home }}/.profile" ;
+  args:
+    executable: /bin/bash
 
 - name: "make /etc/ceph/ on client0"
   shell: |
