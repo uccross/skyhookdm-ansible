@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/KDahlgren/skyhook-ansible.svg?branch=master)](https://travis-ci.com/KDahlgren/skyhook-ansible)
+<br />
+
 # skyhook-ansible
 
 ## Running on CloudLab
