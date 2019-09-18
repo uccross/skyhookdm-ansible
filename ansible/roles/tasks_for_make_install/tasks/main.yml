@@ -53,4 +53,4 @@
     
 - name: "make ceph log directory"
   shell: |
-    test -d /var/log/ceph || sudo mkdir /var/log/ceph ;
+    test -d /var/log/ceph || sudo mkdir /var/log/ceph ; #need to do this so logs collect in default location
