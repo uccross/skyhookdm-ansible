@@ -19,7 +19,7 @@
   shell: |
     cd {{ local_home }} ;
     if df -h | grep -q sda4; then echo \"mounted, unmounting\"; sudo umount "/mnt/{{ repo_dev_name }}"; fi;
-    sudo bash format-device.sh {{ this_user }} {{ repo_dev_name }} ;
+    yes | sudo bash format-device.sh {{ this_user }} {{ repo_dev_name }} ;
 
 - name: "cloning repo"
   shell: |
