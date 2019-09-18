@@ -34,6 +34,7 @@
 - name: "running install deps"
   shell: |
     cd "/mnt/{{ repo_dev_name }}/skyhookdm-ceph" ;
+    sudo apt-get update ;
     sudo ./install-deps.sh ;
 
 - name: "running do cmake"
