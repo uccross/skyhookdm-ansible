@@ -1,3 +1,12 @@
+- name: "installing software"
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - vim
+    - tmux
+    - screen
+    - tkdiff
+    - dstat
+
 - name: "copy experiment helper scripts to build directory"
   copy:
     src: "{{ item }}"
