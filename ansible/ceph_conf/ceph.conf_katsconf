@@ -10,6 +10,9 @@ osd pool default pg num = 32
 osd pool default pgp num = 32 
 osd crush chooseleaf type = 1 
  
+[mon]
+mon allow pool delete = true
+
 [osd] 
 osd max write size = 480 #MB
 osd max object size = 512M #MB
