@@ -41,3 +41,7 @@
   shell: |
     cd "/mnt/{{ repo_dev_name }}/skyhookdm-ceph/build/" ;
     sudo make install ;
+    
+- name: "make ceph log directory"
+  shell: |
+    test -d /var/log/ceph || sudo mkdir /var/log/ceph ;
