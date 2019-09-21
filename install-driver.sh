@@ -20,7 +20,7 @@ fi
 # -------------------- #
 nosds=$1
 sshkeypath=$2
-repo_dev_name=$3 
+repo_dev_name=$3
 osd_dev_name=$4
 skyhook_branch=$5
 ceph_conf=$6
@@ -111,11 +111,11 @@ cat $ansible_dir/lib/ceph-deploy-ansible/ansible/hosts;
 # -------------------- #
 echo "write the vars file used for skyhook install based on commandline inputs..."
 # note the first echo overwrites existing generated vars file and the rest append:
-echo "---" > $ansible_dir/lib/ceph-deploy-ansible/ansible/vars/install-driver-generated.yml;
-echo "repo_dev_name: ${repo_dev_name}" >> $ansible_dir/lib/ceph-deploy-ansible/ansible/vars/install-driver-generated.yml;
-echo "osd_dev_name: ${osd_dev_name}" >> $ansible_dir/lib/ceph-deploy-ansible/ansible/vars/install-driver-generated.yml;
-echo "skyhook_branch: ${skyhook_branch}" >> $ansible_dir/lib/ceph-deploy-ansible/ansible/vars/install-driver-generated.yml;
-echo "ceph_conf: ${ceph_conf}" >> $ansible_dir/lib/ceph-deploy-ansible/ansible/vars/install-driver-generated.yml;
+echo "---" > $ansible_dir/vars/install-driver-generated.yml;
+echo "repo_dev_name: ${repo_dev_name}" >> $ansible_dir/vars/install-driver-generated.yml;
+echo "osd_dev_name: ${osd_dev_name}" >> $ansible_dir/vars/install-driver-generated.yml;
+echo "skyhook_branch: ${skyhook_branch}" >> $ansible_dir/vars/install-driver-generated.yml;
+echo "ceph_conf: ${ceph_conf}" >> $ansible_dir/vars/install-driver-generated.yml;
 
 # -------------------- #
 # INSTALL SKYHOOK
@@ -134,7 +134,9 @@ echo `date`;
 echo "run ansible playbook to install skyhook on cluster!";
 cd $ansible_dir;
 vars_file="${ansible_dir}/vars/install-driver-generated.yml" ;
-time ansible-playbook setup_playbook.yml --extra-vars "vars_file=${vars_file}" ;
+cmd="time ansible-playbook setup_playbook.yml --extra-vars \"vars_file=${vars_file}\"" ;
+echo "running cmd : $cmd" ;
+eval $cmd ;
 echo `date`;
 echo "ansible playbook done.";
 sleep 10s;
