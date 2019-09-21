@@ -19,6 +19,7 @@ osd max object size = 512M #MB
 osd class load list = * 
 osd class default list = * 
 osd objectstore = bluestore 
+osd copyfrom max chunk = 25000000 #25MB
 debug osd = 25
 
 [osd.0]
