@@ -134,7 +134,7 @@ echo `date`;
 echo "run ansible playbook to install skyhook on cluster!";
 cd $ansible_dir;
 vars_file="${ansible_dir}/vars/install-driver-generated.yml" ;
-time ansible-playbook setup_playbook.yml --extra-vars "${vars_file}" ;
+time ansible-playbook setup_playbook.yml --extra-vars "vars_file=${vars_file}" ;
 echo `date`;
 echo "ansible playbook done.";
 sleep 10s;
