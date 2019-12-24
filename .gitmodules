@@ -1,6 +1,6 @@
 [submodule "ansible/lib/ceph-deploy-ansible"]
 	path = ansible/lib/ceph-deploy-ansible
-	url = https://github.com/KDahlgren/ceph-deploy-ansible.git
+	url = https://github.com/uccross/ceph-deploy-ansible.git
 [submodule "ansible/lib-transforms/ceph-deploy-ansible"]
 	path = ansible/lib-transforms/ceph-deploy-ansible
-	url = https://github.com/KDahlgren/ceph-deploy-ansible.git
+	url = https://github.com/uccross/ceph-deploy-ansible
