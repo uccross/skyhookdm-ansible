@@ -37,9 +37,9 @@
     make -j36 cls_tabular ;
 
 # install cls tabular changes
-- name: "installing tabular so lib"
-  shell: |
-    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
-    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
-    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
+# - name: "installing tabular so lib"
+#  shell: |
+#    sudo cp "/mnt/{{ format_device }}/skyhookdm-ceph/build/lib/libcls_tabular.so.1.0.0"  /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+#    cd /usr/lib/x86_64-linux-gnu/rados-classes/ ;
+#    sudo ln -s libcls_tabular.so.1.0.0 libcls_tabular.so.1 ;
+#    sudo ln -s libcls_tabular.so.1 libcls_tabular.so ;
